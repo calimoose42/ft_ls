@@ -1,0 +1,112 @@
+ft_ls
+
+PREP WORK:
+-	LIST DIRECTORY ITEMS: create a program that uses opendir, readdir and closedir to open a directory and list the names of the contained items on std output
+	i.e. ./ft_list_dir directory1
+	file1
+	file2
+	file3
+	$>
+-	OBTAIN INFORMATION ABOUT A FILE: write a program that takes a file as a parameter and uses (among other functions) STAT to obtain information regarding the 	file and display it on std output
+	i.e. ./ft_inspect_file crazyfile1
+	name: crazyfile1
+	type: file
+	modes: rwxr-xr-x
+	number of links: 1
+	owner: zaz
+	group: staff
+	size: 2142 octets
+	Date of last modification: Sep 17 23:42
+	$>
+		NOTE: you will have to use several of the allowed functions before being able to manipulate STAT in order to perform above task
+
+
+
+**MUST name executable ft_ls
+**must submit ft_ls Makefile, that can recompile the program if necessary (i.e. make re)
+**the ft_ls makefile must compile the library and then compile the ft_ls project
+
+ERRORS:
+*must not have seg fault, bus error, double free, etc
+COMPARE WITH THE REAL ls AT ALL TIMES
+
+verify norm
+
+#############the following functions are allowed############
+
+- write
+- opendir
+	#include <dirent.h>
+	DIR 			*opendir(const char *filename)
+
+	*opens the directory named by filename parameter, associates a directory stream with it and returns a pointer to be used to identify the directory stream in subsequent operations. If filename cannot be accessed, or if it cannot malloc enough memory to hold directory stream, NULL pointer is returned, and global variable errno is set to indicate the error
+
+- readdir
+	#include <dirent.h>
+	struct dirent 	*readdir(DIR *dirp)
+
+	*returns a pointer to the next directory entry. Returns NULL upon reaching end of the directory or on error
+
+- closedir
+	#include <dirent.h>
+	int 			closedir(DIR *dirp)
+
+	*closes the named directory stream and frees the structure associated with the dirp pointer, returning 0 on success. On failure, -1 is returned and the global variable errno is set to indicate the error
+
+- stat
+	#include <sys/stat.h>		declares the 'stat' structure
+	#include <unistd.h>
+
+- lstat
+- getpwuid
+- getgrgid
+- listxattr
+- getxattr
+- time
+- ctime
+- readlink
+- malloc
+- free
+- perror
+- strerror
+- exit
+
+
+******you can use other functions to carry out the bonus part if justified, i.e. TCGETATTR is justified in a certain case, but nOT printf
+
+forum for more information : https://forum.intra.42.fr/tags/21/topics
+
+################ MANDATORY SECTION #####################
+
+
+NOTE: it is only necessary to show column formatting when using -l option (i.e. showing permissions, time, user group, etc)
+NOTE: the padding or pagination can vary, but NO INFORMATION CAN BE MISSING IN ANY ls OPTION
+
+-l :
+
+-R :
+	*might be best to START with -R (recursive) as it'll help you pinpoint other errors with your code
+-a :
+
+-r :
+
+-t :
+
+################ BONUS SECTION ####################
+
+Management of ACL and extended attributes:
+	ACL: you will notice that there is an ACL for a given file because of a '+' after its Unix permissions in the output of ls -l
+		example output: ls -l /dev/audio gives you crw-rw----+ 1 root audio 14, 4 nov. 8 12:49 /dev/audio
+			the + at the end of permissions shows there is an ACL (acl provides an additional, more flexible permission mechanism for file systems)
+		if the file ends with @, on a mac os x, it means there are extended attributes. YOU CAN USE xattr -l <filename> to see these extended attributes
+			for more information on these attributes: https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man1/xattr.1.html
+			https://wiki.archlinux.org/index.php/Access_Control_Lists
+
+Management of the columns without the option -l:
+	man 4 tty
+
+Management of options -u, -f, -g, -d, ...
+
+Management of views in colors (Similar to option -G)
+
+Optimization of your code (What is the response time of your ls on a BIG ls -lR, for example?)
