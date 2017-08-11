@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_list_dir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/10 15:45:16 by arohani           #+#    #+#             */
-/*   Updated: 2017/08/10 16:07:27 by arohani          ###   ########.fr       */
+/*   Updated: 2017/08/11 10:33:47 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,30 @@
 
 int		main(int ac, char **av)
 {
-	struct dirent	*pDirent;
-	DIR				*pDir;
+	struct dirent	*dstream;	//structure to hold entire directory stream
+	DIR				*dirp;		//pointer to dirstream opened later, specified by av[1]
 
 	if (ac < 2)
 	{
 		ft_putstr("Usage: testprog <dirname>\n");
 		return (1);
 	}
-	pDir = opendir(av[1]);
-	if (pDir == NULL)
+	dirp = opendir(av[1]);	//dir stream initialized and pointed to by dirp
+	if (dirp == NULL)
 	{
 		ft_putstr("Cannot open directory ");
 		ft_putstr(av[1]);
 		return (1);
 	}
-	while ((pDirent = readdir(pDir)) != NULL)
+	//readdir returns a pointer to the NEXT dir entry. While !=NULL i.e. while dir entry exists
+	while ((dstream = readdir(dirp)) != NULL)
 	{
-		if (pDirent->d_name[0] != '.')
+		if (dstream->d_name[0] != '.')	//don't show file names that start with .
 		{
-			ft_putstr(pDirent->d_name);
+			ft_putstr(dstream->d_name);
 			ft_putchar('\n');
 		}
 	}
-	closedir(pDir);
+	closedir(dirp);	//closes and frees dir stream
 	return (0);
 }
