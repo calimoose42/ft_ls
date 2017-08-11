@@ -6,20 +6,33 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 10:47:26 by arohani           #+#    #+#             */
-/*   Updated: 2017/08/11 14:23:40 by arohani          ###   ########.fr       */
+/*   Updated: 2017/08/11 16:35:35 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <pwd.h>
+#include <uuid/uuid.h>
+#include <grp.h>
+#include <time.h>
 #include "libft/includes/libft.h"
 #include <stdio.h>
 
 int		main(int ac, char **av)
 {
-	int			i;
-	struct stat	buf;
-	
+	int				i;
+	struct stat		buf;
+	struct passwd	*own;
+	struct group	*grp;
+	char			*date;
+	char			cleandate[13];
+	int				j;
+	int				k;
+
 	i = 1;
+	j = 0;
+	k = 4;
 	while (i < ac)
 	{
 		printf("Name: %s\n", av[i]);
@@ -31,16 +44,7 @@ int		main(int ac, char **av)
 			printf("Type: Directory\n");
 		else if (S_ISLNK(buf.st_mode))
 			printf("Type: Symbolic Link\n");
-/*		own[0] = (S_IRUSR(buf.st_mode)) ? 'r' : '-';
-		own[1] = (S_IWUSR(buf.st_mode)) ? 'w' : '-';
-		own[2] = (S_IXUSR(buf.st_mode)) ? 'x' : '-';
-		grp[0] = (S_IRGRP(buf.st_mode)) ? 'r' : '-';
-		grp[1] = (S_IWGRP(buf.st_mode)) ? 'w' : '-';
-		grp[2] = (S_IXGRP(buf.st_mode)) ? 'x' : '-';
-		oth[0] = (S_IROTH(buf.st_mode)) ? 'r' : '-';
-		oth[1] = (S_IWOTH(buf.st_mode)) ? 'w' : '-';
-		oth[2] = (S_IXOTH(buf.st_mode)) ? 'x' : '-';
-*/		printf("Modes: ");
+		printf("Modes: ");
 		printf((buf.st_mode & S_IRUSR) ? "r" : "-");
 		printf((buf.st_mode & S_IWUSR) ? "w" : "-");
 		printf((buf.st_mode & S_IXUSR) ? "x" : "-");
@@ -50,14 +54,20 @@ int		main(int ac, char **av)
 		printf((buf.st_mode & S_IROTH) ? "r" : "-");
 		printf((buf.st_mode & S_IWOTH) ? "w" : "-");
 		printf((buf.st_mode & S_IXOTH) ? "x" : "-");
-//		printf("%s", own);
-//		printf("%s", grp);
-//		printf("%s", oth);
-		printf("\n");
-		/*		printf("value of S_ISREG is %d\n", S_ISREG(buf.st_mode));
-				printf("value of S_ISDIR is %d\n", S_ISDIR(buf.st_mode));
-				printf("value of S_ISLNK is %d\n", S_ISLNK(buf.st_mode));
-				*/		i++;
+		printf("\nNumber of links: %d\n", buf.st_nlink);
+		if ((own = getpwuid(buf.st_uid)) == NULL)
+			printf("getpwuid error\n");
+		printf("Owner: %s\n", own->pw_name);
+		if ((grp = getgrgid(buf.st_gid)) == NULL)
+			printf("getgrgid error\n");
+		printf("Group: %s\n", grp->gr_name);
+		printf("Size: %lld octets\n", buf.st_size);
+		date = ctime(&buf.st_mtime);
+		while (k < 16 && j < 13)
+			cleandate[j++] = date[k++];
+		cleandate[j] = '\0';
+		printf("Date last modified: %s\n", cleandate);
+		i++;
 	}
 	return 0;
 }
