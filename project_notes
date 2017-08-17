@@ -1,4 +1,4 @@
-ft_ls
+t_ls
 
 PREP WORK:
 -	LIST DIRECTORY ITEMS: create a program that uses opendir, readdir and closedir to open a directory and list the names of the contained items on std output
@@ -55,26 +55,233 @@ verify norm
 
 - stat
 	#include <sys/stat.h>		declares the 'stat' structure
-	#include <unistd.h>
+	int 			stat(const char *restrict path, struct stat *restrict buf)
+
+	*obtains information about the file pointed to by path. Read, write or exectue permission of the named file is not required, but all directories listed in the path name leading to the file must be searchable
+	UPON SUCCESSFUL COMPLETION, a value of 0 is returned
 
 - lstat
-- getpwuid
-- getgrgid
-- listxattr
-- getxattr
-- time
-- ctime
-- readlink
-- malloc
-- free
-- perror
-- strerror
-- exit
+	#include <sys/stat.h>
+	int 			lstat(const char *restrict path, struct stat *restrict buf)
 
+	*like stat, EXCEPT in the case where the named file is a symbolic link; lstat() returns information about the link, while stat() returns information about the file the link references. The attributes cannot be relied on in case of symbolic links. In this case, the only attributes returned from an lstat() that refer to the symbolic link itself are the file type (S_IFLNK), size, blocks, and link count (always 1).
+	UPON SUCCESSFUL COMPLETION, a value of 0 is returned, else -1 and errno is set to indicate the error
+
+################ IMPORTANT REGARDING LSTAT AND STAT ######################
+The lstat() and stat() system calls will fail if:
+
+     [EACCES]           Search permission is denied for a component of the path prefix.
+
+     [EFAULT]           Sb or name points to an invalid address.
+
+     [EIO]              An I/O error occurs while reading from or writing to the file system.
+
+     [ELOOP]            Too many symbolic links are encountered in translating the pathname.  This is taken
+                        to be indicative of a looping symbolic link.
+
+
+	struct stat { /* when _DARWIN_FEATURE_64_BIT_INODE is defined */
+         dev_t           st_dev;           /* ID of device containing file */
+         mode_t          st_mode;          /* Mode of file (see below) */
+         nlink_t         st_nlink;         /* Number of hard links */
+         ino_t           st_ino;           /* File serial number */
+         uid_t           st_uid;           /* User ID of the file */
+         gid_t           st_gid;           /* Group ID of the file */
+         dev_t           st_rdev;          /* Device ID */
+         struct timespec st_atimespec;     /* time of last access */
+         struct timespec st_mtimespec;     /* time of last data modification */
+         struct timespec st_ctimespec;     /* time of last status change */
+         struct timespec st_birthtimespec; /* time of file creation(birth) */
+         off_t           st_size;          /* file size, in bytes */
+         blkcnt_t        st_blocks;        /* blocks allocated for file */
+         blksize_t       st_blksize;       /* optimal blocksize for I/O */
+         uint32_t        st_flags;         /* user defined flags for file */
+         uint32_t        st_gen;           /* file generation number */
+         int32_t         st_lspare;        /* RESERVED: DO NOT USE! */
+         int64_t         st_qspare[2];     /* RESERVED: DO NOT USE! */
+         };
+
+      The time-related fields of struct stat are as follows:
+
+     st_atime         Time when file data last accessed.  Changed by the mknod(2), utimes(2) and read(2)
+                      system calls.
+
+     st_mtime         Time when file data last modified.  Changed by the mknod(2), utimes(2) and write(2)
+                      system calls.
+
+     st_ctime         Time when file status was last changed (inode data modification).  Changed by the
+                      chmod(2), chown(2), link(2), mknod(2), rename(2), unlink(2), utimes(2) and write(2)
+                      system calls.
+
+     st_birthtime     Time of file creation. Only set once when the file is created. This field is only
+                      available in the 64 bit inode variants. On filesystems where birthtime is not avail-
+                      able, this field is set to 0 (i.e. epoch).
+
+     The size-related fields of the structures are as follows:
+
+     st_blksize     The optimal I/O block size for the file.
+
+     st_blocks      The actual number of blocks allocated for the file in 512-byte units.  As short symbolic
+                    links are stored in the inode, this number may be zero.
+
+     The status information word st_mode has the following bits:
+
+     #define S_IFMT 0170000           /* type of file */
+     #define        S_IFIFO  0010000  /* named pipe (fifo) */
+     #define        S_IFCHR  0020000  /* character special */
+     #define        S_IFDIR  0040000  /* directory */
+     #define        S_IFBLK  0060000  /* block special */
+     #define        S_IFREG  0100000  /* regular */
+     #define        S_IFLNK  0120000  /* symbolic link */
+     #define        S_IFSOCK 0140000  /* socket */
+     #define        S_IFWHT  0160000  /* whiteout */
+     #define S_ISUID 0004000  /* set user id on execution */
+     #define S_ISGID 0002000  /* set group id on execution */
+     #define S_ISVTX 0001000  /* save swapped text even after use */
+     #define S_IRUSR 0000400  /* read permission, owner */
+     #define S_IWUSR 0000200  /* write permission, owner */
+     #define S_IXUSR 0000100  /* execute/search permission, owner */
+
+     For a list of access modes, see <sys/stat.h>, access(2) and chmod(2).
+
+     For a list of the file flags in the st_flags field, see <sys/stat.h> and chflags(2).
+             
+- getpwuid
+	#include <sys/types.h>
+	#include <pwd.h>
+	#include <uuid/uuid.h>
+	struct passwd		*getpwuid(uid_t uid)
+
+	struct passwd {
+                   char    *pw_name;       /* user name */
+                   char    *pw_passwd;     /* encrypted password */
+                   uid_t   pw_uid;         /* user uid */
+                   gid_t   pw_gid;         /* user gid */
+                   time_t  pw_change;      /* password change time */
+                   char    *pw_class;      /* user access class */
+                   char    *pw_gecos;      /* Honeywell login info */
+                   char    *pw_dir;        /* home directory */
+                   char    *pw_shell;      /* default shell */
+                   time_t  pw_expire;      /* account expiration */
+                   int     pw_fields;      /* internal: fields filled in */
+           };
+    returns pointer to group element, otherwise returns a NULL if entry not found
+
+- getgrgid
+	#include <grp.h>
+	#include <uuid/uuid.h>
+	struct group 		*getgrgid(gid_t gid)
+
+	struct group {
+                   char    *gr_name;       /* group name */
+                   char    *gr_passwd;     /* group password */
+                   gid_t   gr_gid;         /* group id */
+                   char    **gr_mem;       /* group members */
+           };
+    returns pointer to group element, otherwise returns a NULL if entry not found
+
+- listxattr
+	#include <sys/xattr.h>
+	ssize_t				listxattr(const char *path, char *namebuf, size_t size, int options)
+
+	**extends the basic attributes associated with files and directories in the file system
+	**retrieves a list of names of extended attributes associated with the given PATH in the file system
+	**NAMEBUF is a data buffer of SIZE bytes for the names of the extended attributes associated with PATH
+	**OPTIONS controls how the attribute list is generated:
+		--XATTR_NOFOLLOW: do not follow symbolic links. With this option, listxattr() will list attributes of the link itself instead of the target path
+		--XATTR_SHOWCOMPRESSION: lists HFS Plus Compression extended attribute(s) (if present) for the file referred to by PATH or FD
+	**if NAMEBUF is set to NULL, function returns the size of the list of extended attribute names, which can then be used to determine the size of a buffer sufficiently large to hold the names of the attributes currently associated with path
+	**RETURN VALUES: size of extended attribute name list is returned, else 0 for no attributes or -1 on failure. See man page for list of error codes
+
+- getxattr
+	#include <sys/xattr.h>
+	ssize_t getxattr(const char *path, const char *name, void *value, size_t size, u_int32_t position, int options)
+
+	**retrieves up to SIZE bytes of data from the extended attribute identified by NAME associated with PATH into a pre-allocated buffer pointed to by VALUE. The function returns the number of bytes of data retrieved.
+	**an extended attribute's NAME is a simple NULL-terminated UTF-8 string
+	**POSITION specifies an offset within the extended attribute
+	**on success, VALUE contains the data associated with NAME. When VALUE is set to NULL, getxattr() returns current size of the named attribute, which can be used to determine the size of a buffer sufficiently large to hold the data currently associated with the attribute
+	**OPTIONS specify options for retrieving extended attributes:
+		--XATTR_NOFOLLOW: don't follow symbolic links
+		--XATTR_SHOWCOMPRESSION returns HFS Plus Compression extended attribute NAME (if present) for the file referred to by PATH or FD
+	**RETURN VALUES: on success, size of the extended attribute data is returned, else -1 for error (see man page for error codes)
+
+- time
+	#include <time.h>
+	time_t				time(time_t *tloc)
+	
+	RETURN VALUE of time in seconds since jan 1 1970 00:00:00, without including leap seconds.
+	in case of ERROR: time() returns the value (time_t)-1
+	the return value is also stored in *tloc, provided that tloc is non-NULL
+
+- ctime
+	#include <time.h>
+	char 				*ctime(const time_t *clock)
+	
+	takes, as argument, a time value representing time in seconds since Epoch i.e. jan 1 1970 00:00:00
+	in case of ERROR: return NULL and sets errno to appropriate value
+	RETURN VALUE format: Www Mmm dd hh:mm:ss yyyy (weekday, month, day of month, time, year)
+	i.e. printf("%s", ctime(&curtime)) gives Mon Aug 13 08:23:14 2012
+
+- readlink (man 2)
+	#include <unistd.h>
+	ssize_t				readlink(const char *restrict path, char *restrict buf, size_t bufsize)
+
+	**places the contents of the symbolic link PATH in the buffer BUF, which has size BUFSIZE. Does NOT append a NUL terminator to BUF
+	**RETURN VALUE: returns the count of characters placed in the buffer if it succeeds, or a -1 if an error occurs (see man 2 page)
+
+- malloc
+	#include <stdlib.h>
+	void				*malloc(size_t size)
+
+	**allocates SIZE bytes of memory and returns a pointer to that allocated memory
+- free
+	#include <stdlib.h>
+
+	void				free(void *ptr)
+
+	**deallocates the memory allocation pointed to by ptr. If ptr is a NULL pointer, no operation is performed
+	**RETURN VALUES: does not return any value unless there's an error
+
+- perror
+	#include <stdio.h>
+	void				perror(const char *s)
+
+	**looks up the error message string corresponding to an error number
+	**finds the error message corresponding to the current value of the global variable ERRNO and writes it, followed by a newline, to the 
+- strerror
+	#include <stdio.h>
+	char 				*strerror(int errnum)
+
+	**look up error message string corresponding to an error number
+	**accepts an error number argument ERRNUM and returns a pointer to the corresponding message string (UNLIKE perror, uses error number argument, and NOT the global variable ERRNO)
+	**if the error number is not recognized, returns an error message containing "Unknown error: " followed by the error number in decimal
+	**returns EINVAL as a warning
+	IF YOU USE A FUNCTION THAT EFFECTS errno THEN IT MAKES SENSE TO USE PERROR
+
+- exit
+	#include <stdlib.h>
+	void				exit(int status)
+
+	**before extermination, exit() performs the following functions in the order listed:
+	       1.   Call the functions registered with the atexit(3) function, in the reverse order of their registration.
+
+           2.   Flush all open output streams.
+
+           3.   Close all open streams.
+
+           4.   Unlink all files created with the tmpfile(3) function.
+
+      **RETURN VALUES: never returns anything
+      **should try and give reason for exiting, i.e. error message in order to debug. And should NOT use exit within functions that you add to a library
+
+- leaks:
+	for testing program for leaks, NOTE: only works WHILE EXECUTABLE RUNS
 
 ******you can use other functions to carry out the bonus part if justified, i.e. TCGETATTR is justified in a certain case, but nOT printf
 
-forum for more information : https://forum.intra.42.fr/tags/21/topics
+FORUM
+for more information : https://forum.intra.42.fr/tags/21/topics
 
 ################ MANDATORY SECTION #####################
 
@@ -82,15 +289,123 @@ forum for more information : https://forum.intra.42.fr/tags/21/topics
 NOTE: it is only necessary to show column formatting when using -l option (i.e. showing permissions, time, user group, etc)
 NOTE: the padding or pagination can vary, but NO INFORMATION CAN BE MISSING IN ANY ls OPTION
 
--l :
+LS:
+**exits 0 on success, >0 if an error occurs
 
--R :
-	*might be best to START with -R (recursive) as it'll help you pinpoint other errors with your code
--a :
+EXECUTION PRIORITY OF 5 REQUIRED OPTIONS:
+1) -R
+2) -a
+3) -l
+4) -r
+5) -t
 
--r :
+-l : list in LONG format. If the output is to a terminal, a total sum for all file sizes is output on a line BEFORE the long listing
+		**displays file type/permissions, Number of links, Owner name, Group name, Size in octets, Date last modified (if less than 6 months ago MMM DD HH:MM, else MMM DD YYYY), file name (color-coded for bonus)
 
--t :
+		file type codes:
+	       b     Block special file.
+           c     Character special file.
+           d     Directory.
+           l     Symbolic link.
+           s     Socket link.
+           p     FIFO.
+           -     Regular file.
+
+-R : recursively lists SUBDIRECTORIES encountered
+
+	Order:
+	1) performs regular ls display, then newline
+	2) after newline, displays first subdirectory encountered followed by ':' and newline
+	3a) displays simple ls of all content in this first subdirectory, followed by newline
+	3b) displays first sub-subdirectory encountered followed by ':' and newline
+	3c) process repeats until all subdirectories and contained items in first-encountered subdirectory is accounted for, before moving to the 2nd subdirectory in .  then 3rd then 4th until there are no subdirectories remaining
+
+	EXAMPLE:
+➜  ft_ls git:(master) ✗ ls
+author             compile_list.sh    ft_inspect_file.c  ft_list_dir.c      project_notes      test_dir
+compile_inspect.sh ft_inspect_file    ft_list_dir        libft              symlinkfile
+➜  ft_ls git:(master) ✗ ls -R
+author             compile_list.sh    ft_inspect_file.c  ft_list_dir.c      project_notes      test_dir
+compile_inspect.sh ft_inspect_file    ft_list_dir        libft              symlinkfile
+
+./libft:
+Makefile                 ft_lstmap.c              ft_putnbr.c              ft_strequ.c              ft_strnstr.c
+ft_atoi.c                ft_lstnew.c              ft_putnbr_fd.c           ft_striter.c             ft_strrchr.c
+ft_bzero.c               ft_memalloc.c            ft_putstr.c              ft_striteri.c            ft_strsplit.c
+ft_is_prime.c            ft_memccpy.c             ft_putstr_fd.c           ft_strjoin.c             ft_strstr.c
+ft_isalnum.c             ft_memchr.c              ft_recursive_factorial.c ft_strlcat.c             ft_strsub.c
+ft_isalpha.c             ft_memcmp.c              ft_recursive_power.c     ft_strlen.c              ft_strtrim.c
+ft_isascii.c             ft_memcpy.c              ft_sqrt.c                ft_strlowcase.c          ft_tolower.c
+ft_isdigit.c             ft_memdel.c              ft_strcat.c              ft_strmap.c              ft_toupper.c
+ft_isprint.c             ft_memmove.c             ft_strchr.c              ft_strmapi.c             get_next_line.c
+ft_itoa.c                ft_memset.c              ft_strclr.c              ft_strncat.c             includes
+ft_lstadd.c              ft_putchar.c             ft_strcmp.c              ft_strncmp.c
+ft_lstdel.c              ft_putchar_fd.c          ft_strcpy.c              ft_strncpy.c
+ft_lstdelone.c           ft_putendl.c             ft_strdel.c              ft_strnequ.c
+ft_lstiter.c             ft_putendl_fd.c          ft_strdup.c              ft_strnew.c
+
+./libft/includes:
+get_next_line.h libft.h
+
+./test_dir:
+dir1            file1           file2           file3           ft_inspect_file symlinkfile
+
+./test_dir/dir1:
+
+	****might be best to START with -R (recursive) as it'll help you pinpoint other errors with your code
+
+-a : ls that includes all directory entries whose name begin with a dot (.)
+
+	EXAMPLE: 
+➜  ft_ls git:(master) ✗ ls
+author             compile_list.sh    ft_inspect_file.c  ft_list_dir.c      project_notes      test_dir
+compile_inspect.sh ft_inspect_file    ft_list_dir        libft              symlinkfile
+➜  ft_ls git:(master) ✗ ls -a
+.                  author             ft_inspect_file    ft_list_dir.c      symlinkfile
+..                 compile_inspect.sh ft_inspect_file.c  libft              test_dir
+.git               compile_list.sh    ft_list_dir        project_notes
+
+(in this example, the only difference is displaying ., .. and .git)
+
+-r : REVERSE the order of the sort to get reverse LEXICOGRAPHICAL Oorder or the OLDEST ENTRIES first (or largest files last, if combined with sort by size)
+
+EXAMPLE:
+➜  ft_ls git:(master) ✗ ls
+author             compile_list.sh    ft_inspect_file.c  ft_list_dir.c      project_notes      test_dir
+compile_inspect.sh ft_inspect_file    ft_list_dir        libft              symlinkfile
+➜  ft_ls git:(master) ✗ ls -r
+test_dir           project_notes      ft_list_dir.c      ft_inspect_file.c  compile_list.sh    author
+symlinkfile        libft              ft_list_dir        ft_inspect_file    compile_inspect.sh
+
+-t : sort by time modified (most recently modified first) before sorting the operands by lexicographical order
+
+EXAMPLE:
+➜  ft_ls git:(master) ✗ ls -l
+total 128
+-rw-r--r--   1 arohani  2017_paris      8 Aug 10 14:41 author
+-rw-r--r--   1 arohani  2017_paris    204 Aug 11 10:50 compile_inspect.sh
+-rw-r--r--   1 arohani  2017_paris    188 Aug 11 10:49 compile_list.sh
+-rwxr-xr-x   1 arohani  2017_paris   8900 Aug 11 16:35 ft_inspect_file
+-rw-r--r--   1 arohani  2017_paris   2505 Aug 11 16:35 ft_inspect_file.c
+-rwxr-xr-x   1 arohani  2017_paris   8744 Aug 11 10:34 ft_list_dir
+-rw-r--r--   1 arohani  2017_paris   1706 Aug 11 10:33 ft_list_dir.c
+drwxr-xr-x  68 arohani  2017_paris   2312 Aug 11 16:37 libft
+-rw-r--r--   1 arohani  2017_paris  14432 Aug 17 14:31 project_notes
+lrwxr-xr-x   1 arohani  2017_paris     13 Aug 11 12:08 symlinkfile -> project_notes
+drwxr-xr-x   8 arohani  2017_paris    272 Aug 11 13:13 test_dir
+➜  ft_ls git:(master) ✗ ls -lt
+total 128
+-rw-r--r--   1 arohani  2017_paris  14432 Aug 17 14:31 project_notes
+drwxr-xr-x  68 arohani  2017_paris   2312 Aug 11 16:37 libft
+-rwxr-xr-x   1 arohani  2017_paris   8900 Aug 11 16:35 ft_inspect_file
+-rw-r--r--   1 arohani  2017_paris   2505 Aug 11 16:35 ft_inspect_file.c
+drwxr-xr-x   8 arohani  2017_paris    272 Aug 11 13:13 test_dir
+lrwxr-xr-x   1 arohani  2017_paris     13 Aug 11 12:08 symlinkfile -> project_notes
+-rw-r--r--   1 arohani  2017_paris    204 Aug 11 10:50 compile_inspect.sh
+-rw-r--r--   1 arohani  2017_paris    188 Aug 11 10:49 compile_list.sh
+-rwxr-xr-x   1 arohani  2017_paris   8744 Aug 11 10:34 ft_list_dir
+-rw-r--r--   1 arohani  2017_paris   1706 Aug 11 10:33 ft_list_dir.c
+-rw-r--r--   1 arohani  2017_paris      8 Aug 10 14:41 author
 
 ################ BONUS SECTION ####################
 
