@@ -300,7 +300,7 @@ EXECUTION PRIORITY OF 5 REQUIRED OPTIONS:
 5) -t
 
 -l : list in LONG format. If the output is to a terminal, a total sum for all file sizes is output on a line BEFORE the long listing
-		**displays file type/permissions, Number of links, Owner name, Group name, Size in octets, Date last modified (if less than 6 months ago MMM DD HH:MM, else MMM DD YYYY), file name (color-coded for bonus)
+		**displays file type/permissions, Number of links, Owner name, Group name, Size in octets, Date last modified (if less than 6 months ago, in seconds, then MMM DD HH:MM, else MMM DD YYYY (including if file mod date is in the future)), file name (color-coded for bonus)
 
 		file type codes:
 	       b     Block special file.
