@@ -1,5 +1,7 @@
 t_ls
 
+IMPORTANT : https://www.lemoda.net/c/recursive-directory/
+
 PREP WORK:
 -	LIST DIRECTORY ITEMS: create a program that uses opendir, readdir and closedir to open a directory and list the names of the contained items on std output
 	i.e. ./ft_list_dir directory1

@@ -6,12 +6,13 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/10 15:45:16 by arohani           #+#    #+#             */
-/*   Updated: 2017/08/18 15:49:14 by arohani          ###   ########.fr       */
+/*   Updated: 2017/08/21 14:06:32 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <dirent.h>
 #include "libft/includes/libft.h"
+#include <stdio.h>
 
 int		main(int ac, char **av)
 {
@@ -36,6 +37,8 @@ int		main(int ac, char **av)
 		if (dstream->d_name[0] != '.')	//don't show file names that start with .
 		{
 			ft_putstr(dstream->d_name);
+			if (DT_DIR(dstream->d_type))
+				printf("this file is a directory\n");
 			ft_putchar('\n');
 		}
 	}

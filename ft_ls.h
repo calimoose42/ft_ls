@@ -6,14 +6,13 @@
 /*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/08/18 15:41:27 by arohani          ###   ########.fr       */
+/*   Updated: 2017/08/21 14:12:39 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
 
-# include <sys/stat.h>
 # include <sys/types.h>
 # include <pwd.h>
 # include <uuid/uuid.h>
