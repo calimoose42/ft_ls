@@ -6,7 +6,7 @@
 /*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/08/21 14:12:39 by arohani          ###   ########.fr       */
+/*   Updated: 2017/08/22 14:57:56 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include "libft/includes/libft.h"
 # include <dirent.h>
 
-typedef struct		s_list_ls
+/*typedef struct		s_list_ls
 {
 	struct dirent	*dstream;
 	DIR				*dirp;
@@ -35,7 +35,18 @@ typedef struct		s_list_ls
 	int				j;
 	int				k;
 }					t_list_ls;
+*/
+typedef struct		s_opt
+{
+	int				l;
+	int				r;
+	int				rec;
+	int				a;
+	int				t;
+}					t_opt;
 
+int					list_dir(char *str, int a);
+/*
 typedef struct		s_elem	//to store details of each file read within directory stream
 {
 	char			*name;
@@ -51,5 +62,5 @@ typedef struct		s_elem	//to store details of each file read within directory str
 	int				isdir;
 	struct s_elem	*next;
 }					t_elem;
-
+*/
 #endif
