@@ -6,11 +6,12 @@
 /*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/22 14:26:12 by arohani           #+#    #+#             */
-/*   Updated: 2017/08/22 15:25:39 by arohani          ###   ########.fr       */
+/*   Updated: 2017/08/22 16:38:16 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#include <stdio.h>
 
 int		main(int ac, char **av)
 {
@@ -18,17 +19,12 @@ int		main(int ac, char **av)
 	t_opt		option = {0, 0, 0, 0, 0};
 	int			i;
 
-	str = "./";
+	str = (av[1] && av[1][0] != '-') ? av[1] : "./";
 	i = 0;
-	if (av[1])
+	if (av[1] && av[1][0] == '-')
 	{
 		while (av[1][i] && ac > 1)
 		{
-			if (av[1][0] != '-')
-			{
-				ft_putstr("Error: no hyphen in second argument\n");
-				exit(1);
-			}
 			if (av[1][i] == 'l')
 				option.l = 1;
 			if (av[1][i] == 'r')
@@ -42,7 +38,19 @@ int		main(int ac, char **av)
 			i++;
 		}
 	}
-	if ((ac == 1 || (av[1] && av[1][0] == '-')) && !(ac > 2))
-		list_dir(str, option.a);
+	if (ac == 1)
+	{
+		list_dir("./", option.a);
+		return (0);
+	}
+	i = (av[1][0] == '-') ? 2 : 1;
+	while (av[i])
+	{
+		ft_putstr(av[i]);
+		ft_putstr(":\n");
+		list_dir(av[i++], option.a);
+		if (av[i])
+			ft_putchar('\n');
+	}
 	return (0);
 }
