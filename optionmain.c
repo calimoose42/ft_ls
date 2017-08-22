@@ -6,7 +6,7 @@
 /*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/22 14:26:12 by arohani           #+#    #+#             */
-/*   Updated: 2017/08/22 16:38:16 by arohani          ###   ########.fr       */
+/*   Updated: 2017/08/22 16:45:00 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,11 @@ int		main(int ac, char **av)
 	i = (av[1][0] == '-') ? 2 : 1;
 	while (av[i])
 	{
-		ft_putstr(av[i]);
-		ft_putstr(":\n");
+		if ((ac > 2 && av[1][0] != '-') || (ac > 3 && av[1][0] == '-'))
+		{
+			ft_putstr(av[i]);
+			ft_putstr(":\n");
+		}
 		list_dir(av[i++], option.a);
 		if (av[i])
 			ft_putchar('\n');
