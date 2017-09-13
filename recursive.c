@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   recursive.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 14:46:05 by arohani           #+#    #+#             */
-/*   Updated: 2017/08/18 15:49:17 by arohani          ###   ########.fr       */
+/*   Updated: 2017/08/22 17:04:25 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,12 @@ int		main(int ac, char **av)
 		{
 			ft_putstr(dstream->d_name);
 			ft_putchar('\n');
+		}
+	}
+	closedir(dirp);	//closes and frees dir stream
+	return (0);
 
+	
 	if (!(curr = (t_elem *)malloc(sizeof(t_elem))))
 		ft_putstr("Error: current was not malloced\n");
 	head = curr;

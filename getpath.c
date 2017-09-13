@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getpath.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/21 13:41:04 by arohani           #+#    #+#             */
-/*   Updated: 2017/08/21 13:51:03 by arohani          ###   ########.fr       */
+/*   Updated: 2017/08/22 17:04:21 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <sys/types.h>
 #include <string.h>
 #include <errno.h>
-/* "readdir" etc. are defined here. */
 #include <dirent.h>
 /* limits.h defines "PATH_MAX". */
 #include <limits.h>
