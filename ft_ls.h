@@ -6,7 +6,7 @@
 /*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/04 16:59:40 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/04 17:04:02 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ typedef struct		s_files
 {
 	char			*name;
 	char			*path;
+	struct stat		buf;
+	struct passwd	*own;
+	struct group	*group;
+	char			*date;
+	char			cleandate[13];
+	char			special_date[12];
 	struct s_files	*next;
 }					t_files;
 

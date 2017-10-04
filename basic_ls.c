@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 10:47:26 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/04 16:59:30 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/04 17:33:47 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,37 @@
 */
 #include "ft_ls.h"
 #include <stdio.h>
+
+t_files	*stock_flist(char **files)
+{
+	t_files	*head;
+	t_files	*current;
+	int 	i;
+
+	i = 0;
+	if (!(current = (t_files *)malloc(sizeof(t_files))))
+		return (NULL);
+	head = current;
+	current->name = files[i++];
+	if (!(files[i]))
+		current->next = NULL;
+	while (files[i])
+	{
+		if (!(current->next = (t_files *)malloc(sizeof(t_files))))
+			return (NULL);
+		current = current->next;
+		current->name = files[i++];
+		if (files[i] == 0)
+			current->next = NULL;
+	}
+	while (head)
+	{
+		ft_putstr(head->name);
+		write(1, "\n", 1);
+		head = head->next;
+	}
+	return (head);
+}
 
 char	**sort_files(char **files, int r)
 {
@@ -56,8 +87,7 @@ char	**sort_files(char **files, int r)
 		i++;
 		j = i + 1;
 	}
-	printf("after sorting, file order is as follows : \n");
-	ft_print_table(files);
+	stock_flist(files);
 	return (files);
 }
 
