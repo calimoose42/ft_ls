@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 10:47:26 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/04 17:33:47 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/04 19:09:26 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_files	*stock_flist(char **files)
 	return (head);
 }
 
-char	**sort_files(char **files, int r)
+char	**sort_files_tab(char **files, int r)
 {
 	int 	i;
 	int 	j;
@@ -91,7 +91,7 @@ char	**sort_files(char **files, int r)
 	return (files);
 }
 
-char	**files(char **tab)
+char	**files_tab(char **tab)
 {
 	int i;
 	int j;
@@ -131,7 +131,80 @@ char	**files(char **tab)
 	return (files);
 }
 
-char	**directories(char	**tab)
+t_dirs	*stock_dlist(char **dir, int no_args)
+{
+	t_dirs	*head;
+	t_dirs	*current;
+	int 	i;
+
+	i = 0;
+	if (!(current = (t_dirs *)malloc(sizeof(t_dirs))))
+		return (NULL);
+	head = current;
+	if (no_args == 1)
+	{
+		current->name = ".";
+		current->next = NULL;
+		return (head);
+	}
+	current->name = dir[i++];
+	if (!(dir[i]))
+		current->next = NULL;
+	while (dir[i])
+	{
+		if (!(current->next = (t_dirs *)malloc(sizeof(t_dirs))))
+			return (NULL);
+		current = current->next;
+		current->name = dir[i++];
+		if (dir[i] == 0)
+			current->next = NULL;
+	}
+	while (head)
+	{
+		ft_putstr(head->name);
+		write(1, "\n", 1);
+		head = head->next;
+	}
+	return (head);
+}
+
+char	**sort_dir_tab(char **dir, int r)
+{
+	int 	i;
+	int 	j;
+	char	*tmp;
+
+	i = 0;
+	j = 1;
+
+	while (dir[i])
+	{
+		while (dir[j])
+		{
+			if (r == 0)
+				if (ft_strcmp(dir[i], dir[j]) > 0)
+				{
+					tmp = dir[j];
+					dir[j] = dir[i];
+					dir[i] = tmp;
+				}
+			if (r == 1)
+				if (ft_strcmp(dir[i], dir[j]) < 0)
+				{
+					tmp = dir[j];
+					dir[j] = dir[i];
+					dir[i] = tmp;
+				}
+			j++;
+		}
+		i++;
+		j = i + 1;
+	}
+	stock_dlist(dir, 0);
+	return (dir);
+}
+
+char	**dir_tab(char	**tab)
 {
 	int i;
 	int j;
@@ -141,6 +214,7 @@ char	**directories(char	**tab)
 
 	i = 0;
 	isdir = 0;
+	
 	while (tab[i] != 0)
 	{
 		if (lstat(tab[i], &buf) < 0)
@@ -149,8 +223,11 @@ char	**directories(char	**tab)
 			isdir++;
 		i++;
 	}
-	if (!(dir = (char **)malloc(sizeof(char *) * (isdir + 1))))
-		return (NULL);
+	if (isdir != 0)
+	{
+		if (!(dir = (char **)malloc(sizeof(char *) * (isdir + 1))))
+			return (NULL);
+	}
 	isdir = 0;
 	i = 0;
 	j = 0;
@@ -170,42 +247,81 @@ char	**directories(char	**tab)
 	return (dir);
 }
 
+t_opt	scan_options(char *str)
+{
+	int 	i;
+	t_opt	option = {0, 0, 0, 0, 0};
+
+	i = 1;
+	while (str[i])
+	{
+		option.l = (str[i] != 'l' && option.l == 0) ? 0 : 1;
+		option.rec = (str[i] != 'R' && option.rec == 0) ? 0 : 1;
+		option.t = (str[i] != 't' && option.t == 0) ? 0 : 1;
+		option.r = (str[i] != 'r' && option.r == 0) ? 0 : 1;
+		option.a = (str[i] != 'a' && option.a == 0) ? 0 : 1;
+		i++;
+	}
+	return (option);
+}
+/*
+char	**current_dir(int empty)
+{
+	char	**tab;
+
+	if (!(tab = (char **)malloc(sizeof(char *) * 2)))
+		return (NULL);
+	if (!(tab[0] = (char *)malloc(sizeof(char) * 2)))
+		return (NULL);
+	tab[0][0] = '.';
+	tab[0][1] = '\0';
+	if (!(tab[1] = (char *)malloc(sizeof(char) * 1)))
+		return (NULL);
+	tab[1][0] = 0;
+	return (tab);
+}
+*/
 int		main(int ac, char **av)
 {
 	char			**tab;
 	t_opt			option = {0, 0, 0, 0, 0};
 	int				i = 1;
-	int				j = 1;
-// gonna try and store command line arguments in 2d array without ls options 
+	int				j = 0;
+
 	if (!(tab = (char **)malloc(sizeof(char *) * (ac))))
 		return (-1);
 	if (av[1] && av[1][0] == '-')
 	{
-		while (av[1][j] != '\0')
-		{
-			option.l = (av[1][j] != 'l' && option.l == 0) ? 0 : 1;
-			option.rec = (av[1][j] != 'R' && option.rec == 0) ? 0 : 1;
-			option.t = (av[1][j] != 't' && option.t == 0) ? 0 : 1;
-			option.r = (av[1][j] != 'r' && option.r == 0) ? 0 : 1;
-			option.a = (av[1][j] != 'a' && option.a == 0) ? 0 : 1;
-			j++;
-		}
+		option = scan_options(av[1]);
 		i++;
 	}
-	j = 0;
-	while (av[i])
+	if (av[i])
 	{
-		if (!(tab[j] = (char *)malloc(sizeof(char) * (ft_strlen(av[i] + 1)))))
+		if (!(tab = (char **)malloc(sizeof(char *) * (ac))))
 			return (-1);
-		tab[j++] = av[i++];
+		while (av[i])
+		{
+			if (!(tab[j] = (char *)malloc(sizeof(char) * (ft_strlen(av[i] + 1)))))
+				return (-1);
+			tab[j++] = av[i++];
+		}
 	}
-	tab[j] = 0;
-
+	if (ac == 1 || (ac == 2 && av[1][0] == '-'))
+	{
+		tab[j] = "noarg";
+		stock_dlist(tab, 1);
+	}
 //	is_dir(tab);, while is_dir == 0, store files in struct or table, to store and display
 //	while is_dir == 1, store into struct or table, to later store and display recursively if necessary
-	directories(tab);
-	sort_files(files(tab), option.r);
-	free(tab);
+	else
+	{
+		tab[j] = 0;
+		printf("\nFiles listed below\n");
+		sort_files_tab(files_tab(tab), option.r);
+		printf("\nDirectories listed below\n");
+		sort_dir_tab(dir_tab(tab), option.r);
+		free(tab);
+	}
 	return 0;
 }	
 

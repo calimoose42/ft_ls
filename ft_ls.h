@@ -6,7 +6,7 @@
 /*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/04 17:04:02 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/04 18:45:25 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,19 @@ typedef struct		s_files
 	char			special_date[12];
 	struct s_files	*next;
 }					t_files;
+
+typedef struct		s_dirs
+{
+	char			*name;
+	char			*path;
+	struct stat		buf;
+	struct passwd	*own;
+	struct group	*group;
+	char			*date;
+	char			cleandate[13];
+	char			special_date[12];
+	struct s_dirs	*next;
+}					t_dirs;
 
 int					list_dir(char *str, int a);
 /*
