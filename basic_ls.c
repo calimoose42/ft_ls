@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 10:47:26 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/04 19:09:26 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/04 19:24:30 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,15 +206,14 @@ char	**sort_dir_tab(char **dir, int r)
 
 char	**dir_tab(char	**tab)
 {
-	int i;
-	int j;
+	int 		i;
+	int 		j;
 	struct stat	buf;
-	int isdir;
-	char	**dir;
+	int 		isdir;
+	char		**dir;
 
 	i = 0;
 	isdir = 0;
-	
 	while (tab[i] != 0)
 	{
 		if (lstat(tab[i], &buf) < 0)
@@ -223,12 +222,8 @@ char	**dir_tab(char	**tab)
 			isdir++;
 		i++;
 	}
-	if (isdir != 0)
-	{
-		if (!(dir = (char **)malloc(sizeof(char *) * (isdir + 1))))
-			return (NULL);
-	}
-	isdir = 0;
+	if (!(dir = (char **)malloc(sizeof(char *) * (isdir + 1))))
+		return (NULL);
 	i = 0;
 	j = 0;
 	while (tab[i] != 0)
@@ -245,6 +240,25 @@ char	**dir_tab(char	**tab)
 	}
 	dir[j] = 0;
 	return (dir);
+}
+
+int 	no_directories(char **tab)
+{
+	int 		i;
+	struct stat	buf;
+	int 		isdir;
+
+	i = 0;
+	isdir = 0;
+	while (tab[i] != 0)
+	{
+		if (lstat(tab[i], &buf) < 0)
+			ft_putstr("stat error\n");
+		if (S_ISDIR(buf.st_mode))
+			isdir++;
+		i++;
+	}
+	return (isdir);
 }
 
 t_opt	scan_options(char *str)
@@ -306,6 +320,7 @@ int		main(int ac, char **av)
 			tab[j++] = av[i++];
 		}
 	}
+	tab[j] = 0;
 	if (ac == 1 || (ac == 2 && av[1][0] == '-'))
 	{
 		tab[j] = "noarg";
@@ -315,11 +330,11 @@ int		main(int ac, char **av)
 //	while is_dir == 1, store into struct or table, to later store and display recursively if necessary
 	else
 	{
-		tab[j] = 0;
 		printf("\nFiles listed below\n");
 		sort_files_tab(files_tab(tab), option.r);
 		printf("\nDirectories listed below\n");
-		sort_dir_tab(dir_tab(tab), option.r);
+		if (no_directories(tab))
+			sort_dir_tab(dir_tab(tab), option.r);
 		free(tab);
 	}
 	return 0;
