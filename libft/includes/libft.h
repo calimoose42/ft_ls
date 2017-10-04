@@ -6,7 +6,7 @@
 /*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 18:31:37 by arohani           #+#    #+#             */
-/*   Updated: 2017/06/26 16:43:11 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/04 14:40:07 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ int				ft_recursive_power(int nb, int power);
 int				ft_sqrt(int nb);
 int				ft_is_prime(int nb);
 char			*ft_strlowcase(char *str);
+void			ft_print_table(char **tab);
 
 #endif

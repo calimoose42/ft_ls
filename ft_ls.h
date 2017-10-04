@@ -6,13 +6,14 @@
 /*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/08/22 14:57:56 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/04 16:59:40 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
 
+# include <sys/stat.h>
 # include <sys/types.h>
 # include <pwd.h>
 # include <uuid/uuid.h>
@@ -44,6 +45,13 @@ typedef struct		s_opt
 	int				a;
 	int				t;
 }					t_opt;
+
+typedef struct		s_files
+{
+	char			*name;
+	char			*path;
+	struct s_files	*next;
+}					t_files;
 
 int					list_dir(char *str, int a);
 /*

@@ -6,7 +6,7 @@
 #    By: arohani <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/19 14:41:24 by arohani           #+#    #+#              #
-#    Updated: 2017/08/10 14:27:13 by arohani          ###   ########.fr        #
+#    Updated: 2017/10/04 14:37:10 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,6 +77,7 @@ SRC = ft_atoi.c \
 	  ft_strtrim.c \
 	  ft_tolower.c \
 	  ft_toupper.c \
+	  ft_print_table.c \
 	  get_next_line.c
 
 
