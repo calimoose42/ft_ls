@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:25:16 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/05 16:39:00 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/05 17:40:11 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,31 +44,15 @@ int		main(int ac, char **av)
 	char			**tab;
 	t_opt			option = {0, 0, 0, 0, 0};
 	int				i = 1;
-	int				j = 0;
 
-	if (!(tab = (char **)malloc(sizeof(char *) * (ac))))
-		return (-1);
 	if (av[1] && av[1][0] == '-')
 	{
 		option = scan_options(av[1]);
 		i++;
 	}
-	if (av[i])
-	{
-		if (!(tab = (char **)malloc(sizeof(char *) * (ac))))
-			return (-1);
-		while (av[i])
-		{
-			if (!(tab[j] = (char *)malloc(sizeof(char) * (ft_strlen(av[i] + 1)))))
-				return (-1);
-			tab[j++] = av[i++];
-		}
-	}
-	tab[j] = 0;
+	tab = av + i;
 	if (ac == 1 || (ac == 2 && av[1][0] == '-'))
 		stock_dir_content(".");
-//	is_dir(tab);, while is_dir == 0, store files in struct or table, to store and display
-//	while is_dir == 1, store into struct or table, to later store and display recursively if necessary
 	else
 	{
 		if (dir_total(tab, 1))
@@ -76,7 +60,7 @@ int		main(int ac, char **av)
 		write(1, "\n", 1);
 		if (dir_total(tab, 0))
 			sort_dir_tab(dir_tab(tab), option.r);
-		free(tab);
+		//free(tab);
 	}
 	return 0;
 }
