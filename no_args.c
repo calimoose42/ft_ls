@@ -6,13 +6,14 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 13:51:00 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/05 16:09:52 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/05 18:23:24 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include <stdio.h>
 
+//stock_dir_content accepts a directory in form of char * and displays its content
 char	**stock_dir_content(char *str)
 {
 	struct dirent 	*dstream;
@@ -44,11 +45,11 @@ char	**stock_dir_content(char *str)
 	tab[len] = 0;
 	closedir(dirp);
 	ft_print_table(tab);
-	write(1, "\n", 1);
 	//at this point, consider return value for sorting in -l format i.e. info file-by-file
 	return (tab);
 }
 
+//stock_from_dlist takes a list of dir names and displays content of each dir separated by \n
 void	stock_from_dlist(t_dirs *dlist)
 {
 	while (dlist)
@@ -57,6 +58,7 @@ void	stock_from_dlist(t_dirs *dlist)
 		write(1, ":\n", 2);
 		stock_dir_content(dlist->name);
 		dlist = dlist->next;
+		if (dlist)
+			write(1, "\n", 1);
 	}
-	write(1, "\n", 1);
 }

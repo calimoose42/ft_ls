@@ -6,12 +6,25 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:25:16 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/05 17:40:11 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/05 18:44:09 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include <stdio.h>
+
+int		is_dir(char *str)
+{
+	struct stat buf;
+	if (str)
+	{
+		if (lstat(str, &buf) < 0)
+			ft_putstr("stat error\n");
+		if (S_ISDIR(buf.st_mode))
+			return (1);
+	}
+	return (0);
+}
 
 //dunno where to put this yet, leave it in the main for now
 int 	dir_total(char **tab, int file_check)
@@ -50,17 +63,18 @@ int		main(int ac, char **av)
 		option = scan_options(av[1]);
 		i++;
 	}
-	tab = av + i;
 	if (ac == 1 || (ac == 2 && av[1][0] == '-'))
 		stock_dir_content(".");
 	else
 	{
-		if (dir_total(tab, 1))
+		tab = av + i;
+		if (dir_total(tab, 1))	//1 value checks for files to store separately
+		{
 			sort_files_tab(files_tab(tab), option.r);
-		write(1, "\n", 1);
+			write(1, "\n", 1);
+		}
 		if (dir_total(tab, 0))
 			sort_dir_tab(dir_tab(tab), option.r);
-		//free(tab);
 	}
 	return 0;
 }
