@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 10:47:26 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/04 19:24:30 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/05 12:38:26 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,7 +242,7 @@ char	**dir_tab(char	**tab)
 	return (dir);
 }
 
-int 	no_directories(char **tab)
+int 	dir_total(char **tab)
 {
 	int 		i;
 	struct stat	buf;
@@ -261,7 +261,7 @@ int 	no_directories(char **tab)
 	return (isdir);
 }
 
-t_opt	scan_options(char *str)
+//t_opt	scan_options(char *str)
 {
 	int 	i;
 	t_opt	option = {0, 0, 0, 0, 0};
@@ -333,7 +333,7 @@ int		main(int ac, char **av)
 		printf("\nFiles listed below\n");
 		sort_files_tab(files_tab(tab), option.r);
 		printf("\nDirectories listed below\n");
-		if (no_directories(tab))
+		if (dir_total(tab))
 			sort_dir_tab(dir_tab(tab), option.r);
 		free(tab);
 	}
