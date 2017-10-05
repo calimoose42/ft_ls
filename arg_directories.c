@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   directories.c                                      :+:      :+:    :+:   */
+/*   arg_directories.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:25:00 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/05 13:46:15 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/05 15:57:23 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,14 @@ t_dirs	*stock_dlist(char **dir, int no_args)
 		if (dir[i] == 0)
 			current->next = NULL;
 	}
-	while (head)
+	/*while (head)
 	{
 		ft_putstr(head->name);
 		write(1, "\n", 1);
 		head = head->next;
 	}
+	*/
+	stock_from_dlist(head);
 	return (head);
 }
 

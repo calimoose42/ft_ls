@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:25:16 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/05 13:50:47 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/05 16:39:00 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 #include <stdio.h>
 
 //dunno where to put this yet, leave it in the main for now
-int 	dir_total(char **tab)
+int 	dir_total(char **tab, int file_check)
 {
 	int 		i;
 	struct stat	buf;
 	int 		isdir;
+	int 		isfile;
 
 	i = 0;
+	isfile = 0;
 	isdir = 0;
 	while (tab[i] != 0)
 	{
@@ -28,8 +30,12 @@ int 	dir_total(char **tab)
 			ft_putstr("stat error\n");
 		if (S_ISDIR(buf.st_mode))
 			isdir++;
+		if (S_ISREG(buf.st_mode) || S_ISLNK(buf.st_mode))
+			isfile++;
 		i++;
 	}
+	if (file_check == 1)
+		return (isfile);
 	return (isdir);
 }
 
@@ -65,10 +71,10 @@ int		main(int ac, char **av)
 //	while is_dir == 1, store into struct or table, to later store and display recursively if necessary
 	else
 	{
-		printf("\nFiles listed below\n");
-		sort_files_tab(files_tab(tab), option.r);
-		printf("\nDirectories listed below\n");
-		if (dir_total(tab))
+		if (dir_total(tab, 1))
+			sort_files_tab(files_tab(tab), option.r);
+		write(1, "\n", 1);
+		if (dir_total(tab, 0))
 			sort_dir_tab(dir_tab(tab), option.r);
 		free(tab);
 	}

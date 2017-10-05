@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/05 15:16:00 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/05 16:37:11 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ typedef struct		s_dirs
 }					t_dirs;
 
 t_opt	scan_options(char *str);
-int 	dir_total(char **tab);
+int 	dir_total(char **tab, int file_check);
 char	**dir_tab(char	**tab);
 char	**sort_dir_tab(char **dir, int r);
 t_dirs	*stock_dlist(char **dir, int no_args);
@@ -98,6 +98,7 @@ char	**files_tab(char **tab);
 char	**sort_files_tab(char **files, int r);
 t_files	*stock_flist(char **files);
 char	**stock_dir_content(char *str);
+void	stock_from_dlist(t_dirs *dlist);
 
 /*
 typedef struct		s_elem	//to store details of each file read within directory stream

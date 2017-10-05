@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 13:51:00 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/05 15:36:02 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/05 16:09:52 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,23 @@ char	**stock_dir_content(char *str)
 		if (!(tab[len] = (char *)malloc(sizeof(char) * (ft_strlen(dstream->d_name) + 1))))
 			return (NULL);
 		tab[len++] = dstream->d_name;
-		printf("tab should be stocked with : %s\n", dstream->d_name);
-		printf("tab value is : %s\n", tab[len]);
 	}
 	tab[len] = 0;
 	closedir(dirp);
-	printf("here is the table of dir contents : \n");
 	ft_print_table(tab);
+	write(1, "\n", 1);
+	//at this point, consider return value for sorting in -l format i.e. info file-by-file
 	return (tab);
+}
+
+void	stock_from_dlist(t_dirs *dlist)
+{
+	while (dlist)
+	{
+		ft_putstr(dlist->name);
+		write(1, ":\n", 2);
+		stock_dir_content(dlist->name);
+		dlist = dlist->next;
+	}
+	write(1, "\n", 1);
 }
