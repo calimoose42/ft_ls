@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:25:16 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/06 15:18:06 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/06 17:52:13 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int 	dir_total(char **tab, int file_check)
 int		main(int ac, char **av)
 {
 	char			**tab;
+	char			**processed;
+	t_dirs			*pro;
 	t_opt			option = {0, 0, 0, 0, 0};
 	int				i = 1;
 
@@ -74,7 +76,12 @@ int		main(int ac, char **av)
 			write(1, "\n", 1);
 		}
 		if (dir_total(tab, 0))
-			stock_from_dlist(stock_dlist(sort_dir_tab(dir_tab(tab), option.r)), option.r, option.a);
+		{
+			processed = sort_dir_tab(dir_tab(tab), option.r);
+			pro = stock_dlist(processed, option.t, option.r);
+			stock_from_dlist(pro, option.r, option.a);
+			//stock_from_dlist((stock_dlist((sort_dir_tab(dir_tab(tab), option.r), option.t, option.r)), option.r, option.a));
+		}
 	}
 	return 0;
 }

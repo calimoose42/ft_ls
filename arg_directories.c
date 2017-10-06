@@ -6,17 +6,62 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:25:00 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/06 15:19:06 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/06 17:45:45 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include <stdio.h>
 
+t_dirs	*time_sort_dlist(t_dirs	*head, int r)
+{
+	long int	tmp;
+	t_dirs *first;
+	t_dirs 	*j;
+
+	if (head)
+	{
+		first = head;
+		j = head->next;
+		while (head)
+		{
+			while (j)
+			{
+				if (r == 0)
+				{
+					//if (ft_strcmp(head->date, (j->date)) < 0)
+					if ((head->date) < (j->date))
+					{
+						tmp = j->date;
+						j->date = head->date;
+						head->date = tmp;
+					}
+				}
+				if (r == 1)
+				{
+					//if (ft_strcmp(head->date, (j->date)) > 0)
+					if ((head->date) > (j->date))
+					{
+						tmp = head->date;
+						head->date = j->date;
+						j->date = tmp;
+					}
+				}
+				j = j->next;
+			}
+			head = head->next;
+			if (head)
+				j = head->next;
+		}
+		return (first);
+	}
+	return (NULL);
+}
+
 //after already sorting, sorted list is ready for processing
 //	MAKE SURE to pass a table to this function that has applied any additional
 //	option filters like -t, -a, -A, and if possible, recursive
-t_dirs	*stock_dlist(char **dir)
+t_dirs	*stock_dlist(char **dir, int t, int r)
 {
 	t_dirs	*head;
 	t_dirs	*current;
@@ -25,8 +70,13 @@ t_dirs	*stock_dlist(char **dir)
 	i = 0;
 	if (!(current = (t_dirs *)malloc(sizeof(t_dirs))))
 		return (NULL);
-	head = current;
+	head = current; 
 	current->name = dir[i++];
+	if (lstat(current->name, &current->buf) < 0)
+		ft_putstr("stat error\n");
+	//current->date = ctime(&current->buf.st_mtime);
+	current->date = current->buf.st_mtime;
+	printf("filename : %s\nDate Modified : %ld\n", current->name, current->date);
 	if (!(dir[i]))
 		current->next = NULL;
 	while (dir[i])
@@ -35,9 +85,16 @@ t_dirs	*stock_dlist(char **dir)
 			return (NULL);
 		current = current->next;
 		current->name = dir[i++];
+		if (lstat(current->name, &current->buf) < 0)
+			ft_putstr("stat error\n");
+		//current->date = ctime(&current->buf.st_mtime);
+		current->date = current->buf.st_mtime;
+		printf("filename : %s\nDate Modified : %ld\n", current->name, current->date);
 		if (dir[i] == 0)
 			current->next = NULL;
 	}
+	if (t == 1)
+		return (time_sort_dlist(head, r));
 	return (head);
 }
 /*

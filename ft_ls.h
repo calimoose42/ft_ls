@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/06 15:17:46 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/06 17:38:55 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ typedef struct		s_dir_data
 	struct stat		buf;
 	struct passwd	*own;
 	struct group	*group;
-	char			*date;
+	long int		date;
+	char			*raw_date;
 	char			cleandate[13];
 	char			special_date[12];
 }					t_dir_data;
@@ -83,7 +84,8 @@ typedef struct		s_dirs
 	struct stat		buf;
 	struct passwd	*own;
 	struct group	*group;
-	char			*date;
+	long int		date;
+	char			*raw_date;
 	char			cleandate[13];
 	char			special_date[12];
 	struct s_dirs	*next;
@@ -93,13 +95,14 @@ t_opt	scan_options(char *str);
 int 	dir_total(char **tab, int file_check);
 char	**dir_tab(char	**tab);
 char	**sort_dir_tab(char **dir, int r);
-t_dirs	*stock_dlist(char **dir);
+t_dirs	*stock_dlist(char **dir, int t, int r);
 char	**files_tab(char **tab);
 char	**sort_files_tab(char **files, int r);
 t_files	*stock_flist(char **files);
 char	**stock_dir_content(char *str);
 void	stock_from_dlist(t_dirs *dlist, int r, int a);
 char	**sort_dir_content(char **dir_data, int r, int a);
+t_dirs	*time_sort_dlist(t_dirs	*head, int r);
 
 /*
 typedef struct		s_elem	//to store details of each file read within directory stream
