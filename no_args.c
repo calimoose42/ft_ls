@@ -6,12 +6,58 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 13:51:00 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/05 18:23:24 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/06 14:59:23 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include <stdio.h>
+
+//sort directory contents
+char	**sort_dir_content(char **dir_data, int r, int a)
+{
+	int 	i;
+	int 	j;
+	char	*tmp;
+
+	i = 0;
+	j = 1;
+	while (dir_data[i])
+	{
+		while (dir_data[j])
+		{
+			if (r == 0)
+				if (ft_strcmp(dir_data[i], dir_data[j]) > 0)
+				{
+					tmp = dir_data[j];
+					dir_data[j] = dir_data[i];
+					dir_data[i] = tmp;
+				}
+			if (r == 1)
+				if (ft_strcmp(dir_data[i], dir_data[j]) < 0)
+				{
+					tmp = dir_data[j];
+					dir_data[j] = dir_data[i];
+					dir_data[i] = tmp;
+				}
+			j++;
+		}
+		i++;
+		j = i + 1;
+	}
+	i = 0;
+	while (r == 0 && a == 0 && dir_data[i] && dir_data[i][0] == '.') //-a option if no reverse order
+		i++;
+	dir_data = dir_data + i;
+	if (r == 1 && a == 0)
+	{
+		while (dir_data[i] && dir_data[i][0] != '.')
+			i++;
+		dir_data[i] = 0;
+	}
+	ft_print_table(dir_data);
+	return (dir_data);
+}
 
 //stock_dir_content accepts a directory in form of char * and displays its content
 char	**stock_dir_content(char *str)
@@ -44,7 +90,6 @@ char	**stock_dir_content(char *str)
 	}
 	tab[len] = 0;
 	closedir(dirp);
-	ft_print_table(tab);
 	//at this point, consider return value for sorting in -l format i.e. info file-by-file
 	return (tab);
 }

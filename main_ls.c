@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:25:16 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/05 18:44:09 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/06 14:49:49 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ int		main(int ac, char **av)
 		i++;
 	}
 	if (ac == 1 || (ac == 2 && av[1][0] == '-'))
-		stock_dir_content(".");
-	else
+		sort_dir_content(stock_dir_content("."), option.r, option.a);
+	if (!(ac == 1 || (ac == 2 && av[1][0] == '-')))
 	{
 		tab = av + i;
 		if (dir_total(tab, 1))	//1 value checks for files to store separately

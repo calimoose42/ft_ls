@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:25:00 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/05 19:21:23 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/06 14:13:01 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,18 @@ t_dirs	*stock_dlist(char **dir, int no_args)
 	stock_from_dlist(head);
 	return (head);
 }
+/*
+char	**hidden_dir_tab(char **dir, int a)
+{
+	int 	i;
 
+	i = 0;
+	while (dir[i] && dir[i][0] == '.')
+		i++;
+	dir = dir + i;
+	return (dir); 
+}
+*/
 //sort_dir_tab to apply reverse option, if necessary
 char	**sort_dir_tab(char **dir, int r)
 {
@@ -92,22 +103,12 @@ char	**dir_tab(char	**tab)
 	int 		i;
 	int 		j;
 	struct stat	buf;
-	int 		isdir;
+	//int 		isdir;
 	char		**dir;
 
 	i = 0;
-	isdir = 0;
-	while (tab[i] != 0)
-	{
-		if (lstat(tab[i], &buf) < 0)
-			ft_putstr("stat error\n");
-		if (S_ISDIR(buf.st_mode))
-			isdir++;
-		i++;
-	}
 	if (!(dir = (char **)malloc(sizeof(char *) * (dir_total(tab, 0) + 1))))
 		return (NULL);
-	i = 0;
 	j = 0;
 	while (tab[i] != 0)
 	{
