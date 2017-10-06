@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 13:51:00 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/06 14:59:23 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/06 15:16:03 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,13 @@ char	**stock_dir_content(char *str)
 }
 
 //stock_from_dlist takes a list of dir names and displays content of each dir separated by \n
-void	stock_from_dlist(t_dirs *dlist)
+void	stock_from_dlist(t_dirs *dlist, int r, int a)
 {
 	while (dlist)
 	{
 		ft_putstr(dlist->name);
 		write(1, ":\n", 2);
-		stock_dir_content(dlist->name);
+		sort_dir_content(stock_dir_content(dlist->name), r, a);
 		dlist = dlist->next;
 		if (dlist)
 			write(1, "\n", 1);

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:25:00 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/06 14:13:01 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/06 15:19:06 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 //after already sorting, sorted list is ready for processing
 //	MAKE SURE to pass a table to this function that has applied any additional
 //	option filters like -t, -a, -A, and if possible, recursive
-t_dirs	*stock_dlist(char **dir, int no_args)
+t_dirs	*stock_dlist(char **dir)
 {
 	t_dirs	*head;
 	t_dirs	*current;
@@ -26,12 +26,6 @@ t_dirs	*stock_dlist(char **dir, int no_args)
 	if (!(current = (t_dirs *)malloc(sizeof(t_dirs))))
 		return (NULL);
 	head = current;
-	if (no_args == 1)
-	{
-		current->name = ".";
-		current->next = NULL;
-		return (head);
-	}
 	current->name = dir[i++];
 	if (!(dir[i]))
 		current->next = NULL;
@@ -44,7 +38,6 @@ t_dirs	*stock_dlist(char **dir, int no_args)
 		if (dir[i] == 0)
 			current->next = NULL;
 	}
-	stock_from_dlist(head);
 	return (head);
 }
 /*
@@ -92,7 +85,6 @@ char	**sort_dir_tab(char **dir, int r)
 		i++;
 		j = i + 1;
 	}
-	stock_dlist(dir, 0);
 	return (dir);
 }
 

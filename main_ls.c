@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:25:16 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/06 14:49:49 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/06 15:18:06 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int		main(int ac, char **av)
 			write(1, "\n", 1);
 		}
 		if (dir_total(tab, 0))
-			sort_dir_tab(dir_tab(tab), option.r);
+			stock_from_dlist(stock_dlist(sort_dir_tab(dir_tab(tab), option.r)), option.r, option.a);
 	}
 	return 0;
 }
