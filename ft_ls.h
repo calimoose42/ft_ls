@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/06 17:38:55 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/11 17:42:17 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,19 +68,7 @@ typedef struct		s_files
 {
 	char			*name;
 	char			*path;
-	struct stat		buf;
-	struct passwd	*own;
-	struct group	*group;
-	char			*date;
-	char			cleandate[13];
-	char			special_date[12];
-	struct s_files	*next;
-}					t_files;
-
-typedef struct		s_dirs
-{
-	char			*name;
-	char			*path;
+	int				error;
 	struct stat		buf;
 	struct passwd	*own;
 	struct group	*group;
@@ -88,11 +76,11 @@ typedef struct		s_dirs
 	char			*raw_date;
 	char			cleandate[13];
 	char			special_date[12];
-	struct s_dirs	*next;
-}					t_dirs;
+	struct s_files	*next;
+}					t_files;
 
 t_opt	scan_options(char *str);
-int 	dir_total(char **tab, int file_check);
+/* int 	dir_total(char **tab, int file_check);
 char	**dir_tab(char	**tab);
 char	**sort_dir_tab(char **dir, int r);
 t_dirs	*stock_dlist(char **dir, int t, int r);
@@ -103,6 +91,11 @@ char	**stock_dir_content(char *str);
 void	stock_from_dlist(t_dirs *dlist, int r, int a);
 char	**sort_dir_content(char **dir_data, int r, int a);
 t_dirs	*time_sort_dlist(t_dirs	*head, int r);
+*/
+t_files		*all_args(char **tab, t_opt option);
+t_files		*error_list(t_files *args, t_opt option);
+t_files		*reverse_lex(t_files *list, t_opt option);
+void		print_list(t_files *args);
 
 /*
 typedef struct		s_elem	//to store details of each file read within directory stream

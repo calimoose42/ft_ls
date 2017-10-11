@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:25:00 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/06 17:45:45 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/06 18:00:45 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,9 @@ t_dirs	*stock_dlist(char **dir, int t, int r)
 	head = current; 
 	current->name = dir[i++];
 	if (lstat(current->name, &current->buf) < 0)
-		ft_putstr("stat error\n");
+		ft_putstr("stat error in first if of stock_dlist\n");
 	//current->date = ctime(&current->buf.st_mtime);
 	current->date = current->buf.st_mtime;
-	printf("filename : %s\nDate Modified : %ld\n", current->name, current->date);
 	if (!(dir[i]))
 		current->next = NULL;
 	while (dir[i])
@@ -86,10 +85,9 @@ t_dirs	*stock_dlist(char **dir, int t, int r)
 		current = current->next;
 		current->name = dir[i++];
 		if (lstat(current->name, &current->buf) < 0)
-			ft_putstr("stat error\n");
+			ft_putstr("stat error in last if of stock_dlist\n");
 		//current->date = ctime(&current->buf.st_mtime);
 		current->date = current->buf.st_mtime;
-		printf("filename : %s\nDate Modified : %ld\n", current->name, current->date);
 		if (dir[i] == 0)
 			current->next = NULL;
 	}
@@ -162,7 +160,7 @@ char	**dir_tab(char	**tab)
 	while (tab[i] != 0)
 	{
 		if (lstat(tab[i], &buf) < 0)
-			ft_putstr("stat error\n");
+			ft_putstr("stat error in dir_tab\n");
 		if (S_ISDIR(buf.st_mode))
 		{
 			if (!(dir[j] = (char *)malloc(sizeof(char) * (ft_strlen(tab[i] + 1)))))

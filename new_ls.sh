@@ -1,5 +1,5 @@
 make -C libft/
-clang -Wall -Wextra -Werror -c options.c arg_files.c no_args.c main_ls.c arg_directories.c
-clang -Wall -Wextra -Werror options.o arg_files.o no_args.o  main_ls.o arg_directories.o libft/libft.a -o new_ls
+clang -Wall -Wextra -Werror -c options.c arg_check.c main_ls.c
+clang -Wall -Wextra -Werror options.o arg_check.o main_ls.o libft/libft.a -o ft_ls
 rm -f *.o
 make -C libft/ fclean
