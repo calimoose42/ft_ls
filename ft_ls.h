@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/11 17:42:17 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/12 17:08:26 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct		s_files
 	struct stat		buf;
 	struct passwd	*own;
 	struct group	*group;
-	long int		date;
+	time_t			date;
 	char			*raw_date;
 	char			cleandate[13];
 	char			special_date[12];
@@ -96,6 +96,8 @@ t_files		*all_args(char **tab, t_opt option);
 t_files		*error_list(t_files *args, t_opt option);
 t_files		*reverse_lex(t_files *list, t_opt option);
 void		print_list(t_files *args);
+t_files		*time_sort_list(t_files *list, t_opt option);
+t_files		*regular_args(t_files *args, t_opt option);
 
 /*
 typedef struct		s_elem	//to store details of each file read within directory stream

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 14:23:45 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/11 18:14:14 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/12 17:49:19 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,59 @@ void		print_list(t_files *args)
 			printf("args->error = %d\n", args->error);
 */		args = args->next;
 	}
+}
+
+t_files		*time_sort_list(t_files *list, t_opt option)
+{
+	t_files 	*head;
+	t_files		*current;
+	char		*tmp_name;
+	struct stat tmp_stat;
+
+	if (list && option.t == 1)
+	{
+		head = list;
+		current = list->next;
+		while (list && current)
+		{
+			while (current)
+			{
+				if (option.r == 0)
+				{
+					if ((list->buf).st_mtimespec.tv_sec < (current->buf).st_mtimespec.tv_sec)
+					{
+						printf("\nmod time of %s is %ld\n", list->name, (list->buf).st_mtimespec.tv_sec);
+						printf("\nmod time of %s is %ld\n", current->name, (current->buf).st_mtimespec.tv_sec);
+						tmp_name = list->name;
+						list->name = current->name;
+						current->name = tmp_name;
+						tmp_stat = list->buf;
+						list->buf = current->buf;
+						current->buf = tmp_stat;
+						printf("\nmod time of %s is %ld\n", list->name, (list->buf).st_mtimespec.tv_sec);
+						printf("\nmod time of %s is %ld\n", current->name, (current->buf).st_mtimespec.tv_sec);
+					}
+				}
+				if (option.r == 1)
+				{
+					if ((list->buf).st_mtimespec.tv_sec > (current->buf).st_mtimespec.tv_sec)
+					{					
+						tmp_name = list->name;
+						list->name = current->name;
+						current->name = tmp_name;
+						tmp_stat = list->buf;
+						list->buf = current->buf;
+						current->buf = tmp_stat;
+					}
+				}
+				current = current->next;
+			}
+			list = list->next;
+			current = list->next;
+		}
+		return (head);
+	}
+	return (NULL);
 }
 
 t_files		*reverse_lex(t_files *list, t_opt option)
@@ -71,9 +124,105 @@ t_files		*reverse_lex(t_files *list, t_opt option)
 		list = list->next;
 		current = list->next;
 	}
-	printf("trying to print sorted list now\n");
-	print_list(head);
 	return (head);
+}
+
+t_files		*dir_args(t_files *args, t_opt option) 	//no need for -a sorting here, but DONT FORGET IT once reaching directory content analysis
+{
+	t_files		*dirs;
+	t_files		*current;
+
+	while (args && (args->error == 1 || !(S_ISDIR(args->buf.st_mode))))
+		args = args->next;
+	if (args)
+	{
+		if (!(current = (t_files *)malloc(sizeof(t_files *))))
+			return (NULL);
+		dirs = current;
+		current->name = args->name;
+		current->buf = args->buf;
+		args = args->next;
+	}
+	while (args && args->next)
+	{
+		while (args->error == 1 || !(S_ISDIR(args->buf.st_mode)))
+		{
+			args = args->next;
+			if (args == NULL)
+			{
+				current->next = NULL;
+				return (dirs);
+			}
+		}
+		while (args->error == 0 && (S_ISDIR(args->buf.st_mode)))
+		{
+			if (!(current->next = (t_files *)malloc(sizeof(t_files *))))
+				return (NULL);
+			current = current->next;
+			current->name = args->name;
+			current->buf = args->buf;
+			args = args->next;
+			if (args == NULL)
+			{
+				current->next = NULL;
+				return (dirs);
+			}
+		}
+	}
+	reverse_lex(args, option);
+	return (NULL);
+}
+
+t_files		*regular_args(t_files *args, t_opt option)
+{
+	t_files		*regular;
+	t_files		*current;
+
+	while (args && (args->error == 1 || S_ISDIR(args->buf.st_mode)))
+		args = args->next;
+	if (args)
+	{
+		if (!(current = (t_files *)malloc(sizeof(t_files *))))
+			return (NULL);
+		regular = current;
+		current->name = args->name;
+		current->buf = args->buf;
+		args = args->next;
+	}
+	while (args && args->next)
+	{
+		while (args->error == 1 || S_ISDIR(args->buf.st_mode))
+		{
+			args = args->next;
+			if (args == NULL)
+			{
+				current->next = NULL;
+				return (regular);
+			}
+		}
+		while (args->error != 1 && !(S_ISDIR(args->buf.st_mode)))
+		{
+			if (!(current->next = (t_files *)malloc(sizeof(t_files *))))
+				return (NULL);
+			current = current->next;
+			current->name = args->name;
+			current->buf = args->buf;
+			//args = (args->next != NULL) ? args->next : args;
+			args = args->next;
+			if (args == NULL)
+			{
+				current->next = NULL;
+				return (regular);
+			}
+		}
+		if (args->next == NULL)
+		{
+			current->next = NULL;
+			return (regular);
+		}
+	}
+	reverse_lex(args, option);
+	return (NULL);
 }
 
 t_files		*error_list(t_files *args, t_opt option)
@@ -109,20 +258,14 @@ t_files		*error_list(t_files *args, t_opt option)
 		args = args->next;
 	}
 	if (errors)
-	{
-		printf("sending the following list of error files to sort : \n");
-		print_list(errors);
-		reverse_lex(errors, option);
 		return (errors);
-	}
+	reverse_lex(args, option);
 	return (NULL);
 }
 
 t_files		*all_args(char **tab, t_opt option)	/*taken directly from av in main, must store and sort, then if_exists, before ANY non-error displaying*/
 {
 	int 		i;
-//	int 		j;
-//	struct stat	buf;
 	t_files		*args;
 	t_files 	*current;
 
@@ -130,9 +273,9 @@ t_files		*all_args(char **tab, t_opt option)	/*taken directly from av in main, m
 	if (!(current = (t_files *)malloc(sizeof(t_files))))
 		return (NULL);
 	args = current;
-	current->name = tab[i++];
+	current->name = ft_strdup(tab[i++]);
 	if (lstat(current->name, &current->buf) < 0)
-		current->error = 1;
+	current->error = (lstat(current->name, &current->buf) < 0) ? 1 : 0;
 	if (!(tab[i]))
 		current->next = NULL;
 	while (tab[i])
@@ -140,13 +283,20 @@ t_files		*all_args(char **tab, t_opt option)	/*taken directly from av in main, m
 		if (!(current->next = (t_files *)malloc(sizeof(t_files))))
 			return (NULL);
 		current = current->next;
-		current->name = tab[i++];
-		if (lstat(current->name, &current->buf) < 0)
-			current->error = 1;
+		current->name = ft_strdup(tab[i++]);
+		current->error = (lstat(current->name, &current->buf) < 0) ? 1 : 0;
 		if (tab[i] == 0)
 			current->next = NULL;
 	}
-	//error_list(args, option);
-	reverse_lex(args, option);
+	printf("\n ERROR LIST \n");
+	print_list(error_list(args, option));
+	printf("\n REGULAR FILES \n");
+	print_list(regular_args(args, option));
+	printf("\n DIRECTORIES \n");
+	print_list(dir_args(args, option));
+	if (option.t != 1)
+		reverse_lex(args, option);
+	if (option.t == 1)
+		time_sort_list(args, option);
 	return (args);	/* returns all args, NOT sorted, with stocked stat structures and file error verification to manage after sorting */
 }
