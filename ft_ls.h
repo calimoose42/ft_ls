@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/12 17:08:26 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/13 19:08:02 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,12 +92,18 @@ void	stock_from_dlist(t_dirs *dlist, int r, int a);
 char	**sort_dir_content(char **dir_data, int r, int a);
 t_dirs	*time_sort_dlist(t_dirs	*head, int r);
 */
-t_files		*all_args(char **tab, t_opt option);
-t_files		*error_list(t_files *args, t_opt option);
+void		all_args(char **tab, t_opt option);
+t_files		*error_list(t_files *args);
 t_files		*reverse_lex(t_files *list, t_opt option);
 void		print_list(t_files *args);
 t_files		*time_sort_list(t_files *list, t_opt option);
 t_files		*regular_args(t_files *args, t_opt option);
+t_files		*dir_args(t_files *args);
+void		display_errors(t_files *args);
+void		display_regular_args(t_files *args, t_opt option);
+void		does_not_exist(char *str);
+void		list_swap(t_files *head, t_files *a, t_files *b);
+t_files		*get_previous(t_files *head, t_files *a);
 
 /*
 typedef struct		s_elem	//to store details of each file read within directory stream
