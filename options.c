@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:22:34 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/12 20:39:11 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/16 17:04:41 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	illegal_option(char option)
 t_opt	scan_options(char *str)
 {
 	int 	i;
-	t_opt	option = {0, 0, 0, 0, 0};
+	t_opt	option = {0, 0, 0, 0, 0, 0};
 
 	i = 1;
 	while (str[i])

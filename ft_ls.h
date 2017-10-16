@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/13 19:08:02 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/16 17:01:49 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct		s_opt
 	int				rec;
 	int				a;
 	int				t;
+	int				file; //-1 for error list, 1 for file list, 0 for dir list
 }					t_opt;
 
 typedef struct		s_files

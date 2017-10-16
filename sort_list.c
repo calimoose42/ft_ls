@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 17:16:29 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/13 20:11:04 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/16 17:48:02 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,7 @@ t_files			*reverse_lex(t_files *list, t_opt option)
 		while (current)
 		{
 			if (option.r == 0 || option.r == -1)
+			{
 				if (ft_strcmp(list->name, current->name) > 0)
 				{
 					tmp_name = list->name;
@@ -171,7 +172,9 @@ t_files			*reverse_lex(t_files *list, t_opt option)
 					list->buf = current->buf;
 					current->buf = tmp_stat;
 				}
+			}
 			if (option.r == 1)
+			{
 				if (ft_strcmp(list->name, current->name) < 0)
 				{
 					tmp_name = list->name;
@@ -181,13 +184,16 @@ t_files			*reverse_lex(t_files *list, t_opt option)
 					list->buf = current->buf;
 					current->buf = tmp_stat;
 				}
+			}
 			current = current->next;
 		}
 		list = list->next;
 		current = list->next;
 	}
-	if (option.r == -1)
+	if (option.file == -1)
 		display_errors(head);
+	if (option.file == 1)
+		display_regular_args(head, option);
 	return (NULL);
 }
 

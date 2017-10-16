@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 14:23:45 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/13 20:06:00 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/16 17:42:42 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,51 +75,46 @@ t_files		*regular_args(t_files *args, t_opt option)
 {
 	t_files		*regular;
 	t_files		*current;
+	int			first;
 
-	while (args && (args->error == 1 || S_ISDIR(args->buf.st_mode)))
-		args = args->next;
-	if (args)
-	{
-		if (!(current = (t_files *)malloc(sizeof(t_files *))))
-			return (NULL);
-		regular = current;
-		current->name = args->name;
-		current->buf = args->buf;
-		current->next = NULL;
+	first = 0;
+	while (args && first != 1)
+	{	
+		if (args->error != 1 && !(S_ISDIR(args->buf.st_mode)))
+		{
+			if (!(current = (t_files *)malloc(sizeof(t_files *))))
+				return (NULL);
+			regular = current;
+			current->name = args->name;
+			current->buf = args->buf;
+			current->next = NULL;
+			first = 1;
+		}
 		args = args->next;
 	}
 	while (args)
 	{
-		if (args && (args->error == 1 || S_ISDIR(args->buf.st_mode)))
-			args = args->next;
-	/*		if (args == NULL)
-			{
-				current->next = NULL;
-				return (regular);
-			}
-		}
-	*/	while (args && (args->error != 1 && !(S_ISDIR(args->buf.st_mode))))
+		if (args && args->error != 1 && !(S_ISDIR(args->buf.st_mode)))
 		{
-			if (!(current->next = (t_files *)malloc(sizeof(t_files *))))
+			if (!(current->next = (t_files *)malloc(sizeof(t_files))))
 				return (NULL);
 			current = current->next;
 			current->name = args->name;
 			current->buf = args->buf;
-			//current->next = NULL;
-			//args = (args->next != NULL) ? args->next : args;
-			args = args->next;
+			current->next = NULL;
 		}
+		args = args->next;
 	}
 	if (regular)
 	{
-		print_list(regular);
-		printf("\noption.t is %d\n", option.t);
+		option.file = 1;
 		if (option.t == 1)
 			time_sort_list(regular, option);
 		if (option.t == 0)
+		{
 			reverse_lex(regular, option);
+		}
 	}
-	//return (regular);
 	return (NULL);
 }
 
@@ -128,7 +123,7 @@ t_files			*error_list(t_files *args)
 	t_files		*errors;
 	t_files		*current;
 	int			first;
-	t_opt		tmp = {-1, -1, -1, -1, -1};
+	t_opt		tmp = {-1, -1, -1, -1, -1, -1};
 
 	first = 0;
 	while (args && first != 1)
@@ -168,9 +163,7 @@ void		all_args(char **tab, t_opt option)	/*taken directly from av in main, must 
 	int 		i;
 	t_files		*args;
 	t_files 	*current;
-	t_opt		tmp = {0, 0, 0, 0, 0};
 
-	option = tmp;
 	i = 0;
 	if (!(current = (t_files *)malloc(sizeof(t_files))))
 		return ;
@@ -191,5 +184,6 @@ void		all_args(char **tab, t_opt option)	/*taken directly from av in main, must 
 			current->next = NULL;
 	}
 	error_list(args);
+	printf("\n finished error list management \n");
 	regular_args(args, option);
 }

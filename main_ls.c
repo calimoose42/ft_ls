@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:25:16 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/13 18:28:14 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/16 17:02:31 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 int		main(int ac, char **av)
 {
 	char			**tab;
-	t_opt			option = {0, 0, 0, 0, 0};
+	t_opt			option = {0, 0, 0, 0, 0, 0};
 	int				i = 1;
 
 	if (ac < 1)
