@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/12 17:58:24 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/16 17:42:19 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/18 18:59:55 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,29 +19,33 @@ void		does_not_exist(char *str)	/*must be fed arguments that are already sorted*
 	ft_putstr(str);
 	ft_putstr(": No such file or directory\n");
 }
-
-void		display_regular_args(t_files *args, t_opt option)	//after all necessary sorting
+/*
+void		display_directories(t_files *args, t_opt option)
 {
-	//t_files		*reg = NULL;
-
-	/*if (args)
-	{
-		if (option.t == 1)
-			reg = time_sort_list(reg, option);
-		if (option.t == 0)
-			reg = reverse_lex(reg, option);
-	}
-	*/
-	if (option.file == 0)
-		return ;
 	while (args)
 	{
 		ft_putstr(args->name);
 		write(1, "\n", 1);
 		args = args->next;
 	}
-	if (dir_args(args))
-		write (1, "\n", 1);
+}
+*/
+void		display_regular_args(t_files *args, t_opt option)	//after all necessary sorting
+{
+	if (option.file == 0)
+		write(1, "\n", 1);
+	while (args)
+	{
+		ft_putstr(args->name);
+		if (option.file == 0)
+		{
+			ft_putstr(":\n");
+		//	display_dir_contents();
+		}
+		else
+			write(1, "\n", 1);
+		args = args->next;
+	}
 }
 
 void		display_errors(t_files *args)

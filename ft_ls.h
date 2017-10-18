@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/17 17:58:00 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/18 18:33:38 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef struct		s_opt
 	int				rec;
 	int				a;
 	int				t;
-	int				file; //-1 for error list, 1 for file list, 0 for dir list
+	int				file; //-1 for error list, 1 for file list, 0 for dir list, 2 for dir contents
 }					t_opt;
 
 typedef struct		s_files
@@ -99,10 +99,11 @@ t_files		*reverse_lex(t_files *list, t_opt option);
 void		print_list(t_files *args);
 t_files		*time_sort_list(t_files *list, t_opt option);
 t_files		*regular_args(t_files *args, t_opt option);
-t_files		*dir_args(t_files *args);
+t_files		*dir_args(t_files *args, t_opt option);
 void		display_errors(t_files *args);
 void		display_regular_args(t_files *args, t_opt option);
 void		does_not_exist(char *str);
+void		display_directories(t_files *args, t_opt option);
 
 /*
 typedef struct		s_elem	//to store details of each file read within directory stream

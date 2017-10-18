@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 14:23:45 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/18 17:40:26 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/18 18:54:44 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ void		print_list(t_files *args)
 	}
 }
 
-t_files		*dir_args(t_files *args) 	//no need for -a sorting here, but DONT FORGET IT once reaching directory content analysis
+t_files		*dir_args(t_files *args, t_opt option) 	//no need for -a sorting here, but DONT FORGET IT once reaching directory content analysis
 {
 	t_files		*dirs;
-	t_files		*current;
+	t_files		*current = NULL;
 
 	while (args && (args->error == 1 || !(S_ISDIR(args->buf.st_mode))))
 		args = args->next;
@@ -48,33 +48,30 @@ t_files		*dir_args(t_files *args) 	//no need for -a sorting here, but DONT FORGE
 		current->buf = args->buf;
 		args = args->next;
 	}
-	while (args && args->next)
+	if (current)
+		current->next = NULL;
+	while (args)
 	{
-		while (args->error == 1 || !(S_ISDIR(args->buf.st_mode)))
-		{
-			args = args->next;
-			if (args == NULL)
-			{
-				current->next = NULL;
-				print_list(dirs);
-				return (dirs);
-			}
-		}
-		while (args->error == 0 && (S_ISDIR(args->buf.st_mode)))
+		if (args->error == 0 && (S_ISDIR(args->buf.st_mode)))
 		{
 			if (!(current->next = (t_files *)malloc(sizeof(t_files))))
 				return (NULL);
 			current = current->next;
 			current->name = args->name;
 			current->buf = args->buf;
+			current->next = NULL;
 			args = args->next;
-			if (args == NULL)
-			{
-				current->next = NULL;
-				print_list(dirs);
-				return (dirs);
-			}
 		}
+		else
+			args = args->next;
+	}
+	if (dirs)
+	{
+		option.file = 0;
+		if (option.t == 1)
+			time_sort_list(dirs, option);
+		else if (option.t == 0)
+			reverse_lex(dirs, option);
 	}
 	return (NULL);
 }
@@ -126,8 +123,6 @@ t_files		*regular_args(t_files *args, t_opt option)
 		else if (option.t == 0)
 			reverse_lex(regular, option);
 	}
-	if (regular)
-		return (regular);
 	return (NULL);
 }
 
@@ -197,8 +192,9 @@ void		all_args(char **tab, t_opt option)	/*taken directly from av in main, must 
 	}
 	//print_list(args);	/*** this is where CORRECT date values are saved ***/
 	error_list(args);
-	printf("\n finished error list management \n");
+//	printf("\n finished error list management \n");
 	regular_args(args, option);
-	printf("\n finished regular file list management \n");
-	//dir_args(args);
+//	printf("\n finished regular file list management \n");
+	dir_args(args, option);
+	printf("\n finished error list, reg list and dir list display, work on dir content next\n");
 }
