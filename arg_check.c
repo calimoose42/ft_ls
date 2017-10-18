@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 14:23:45 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/16 17:42:42 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/18 17:40:26 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,16 @@
 
 void		print_list(t_files *args)
 {
+	char	*date;
 	printf("About to print a list\n");
 	while (args != NULL)
 	{
-		printf("%s\n", args->name);
+		if ((args->buf).st_mtimespec.tv_sec)
+		{
+			date = ctime(&args->buf.st_mtimespec.tv_sec);
+			printf("time value for %s is %s\n%ld\n", args->name, date, (args->buf).st_mtimespec.tv_sec);
+		}
+						//printf("%s\n", args->name);
 /*		if (args->error == 1)
 			//does_not_exist(args->name);
 			printf("args->error = %d\n", args->error);
@@ -35,7 +41,7 @@ t_files		*dir_args(t_files *args) 	//no need for -a sorting here, but DONT FORGE
 		args = args->next;
 	if (args)
 	{
-		if (!(current = (t_files *)malloc(sizeof(t_files *))))
+		if (!(current = (t_files *)malloc(sizeof(t_files))))
 			return (NULL);
 		dirs = current;
 		current->name = args->name;
@@ -50,12 +56,13 @@ t_files		*dir_args(t_files *args) 	//no need for -a sorting here, but DONT FORGE
 			if (args == NULL)
 			{
 				current->next = NULL;
+				print_list(dirs);
 				return (dirs);
 			}
 		}
 		while (args->error == 0 && (S_ISDIR(args->buf.st_mode)))
 		{
-			if (!(current->next = (t_files *)malloc(sizeof(t_files *))))
+			if (!(current->next = (t_files *)malloc(sizeof(t_files))))
 				return (NULL);
 			current = current->next;
 			current->name = args->name;
@@ -64,6 +71,7 @@ t_files		*dir_args(t_files *args) 	//no need for -a sorting here, but DONT FORGE
 			if (args == NULL)
 			{
 				current->next = NULL;
+				print_list(dirs);
 				return (dirs);
 			}
 		}
@@ -74,27 +82,27 @@ t_files		*dir_args(t_files *args) 	//no need for -a sorting here, but DONT FORGE
 t_files		*regular_args(t_files *args, t_opt option)
 {
 	t_files		*regular;
-	t_files		*current;
-	int			first;
-
-	first = 0;
-	while (args && first != 1)
-	{	
-		if (args->error != 1 && !(S_ISDIR(args->buf.st_mode)))
+	t_files		*current = NULL;
+	
+	while (args && (current == NULL))
+	{
+		if (args->error == 0 && !(S_ISDIR(args->buf.st_mode)))
 		{
-			if (!(current = (t_files *)malloc(sizeof(t_files *))))
+			if (!(current = (t_files *)malloc(sizeof(t_files))))
 				return (NULL);
 			regular = current;
 			current->name = args->name;
 			current->buf = args->buf;
-			current->next = NULL;
-			first = 1;
+			args = args->next;
 		}
-		args = args->next;
+		else
+			args = args->next;
 	}
+	if (current)
+		current->next = NULL;
 	while (args)
 	{
-		if (args && args->error != 1 && !(S_ISDIR(args->buf.st_mode)))
+		if (regular && args->error == 0 && !(S_ISDIR(args->buf.st_mode)))
 		{
 			if (!(current->next = (t_files *)malloc(sizeof(t_files))))
 				return (NULL);
@@ -102,19 +110,24 @@ t_files		*regular_args(t_files *args, t_opt option)
 			current->name = args->name;
 			current->buf = args->buf;
 			current->next = NULL;
+			args = args->next;
+			//current = current->next;
+			//printf("INITIALIZED before starting time sort: time value for %s is %ld\n", regular->name, (regular->buf).st_mtimespec.tv_sec);
 		}
-		args = args->next;
+		else
+			args = args->next;
 	}
+	// printf("2nd element name is %s, time value = %ld\n", regular->next->name, (regular->next->buf).st_mtimespec.tv_sec);
 	if (regular)
 	{
 		option.file = 1;
 		if (option.t == 1)
 			time_sort_list(regular, option);
-		if (option.t == 0)
-		{
+		else if (option.t == 0)
 			reverse_lex(regular, option);
-		}
 	}
+	if (regular)
+		return (regular);
 	return (NULL);
 }
 
@@ -169,7 +182,6 @@ void		all_args(char **tab, t_opt option)	/*taken directly from av in main, must 
 		return ;
 	args = current;
 	current->name = ft_strdup(tab[i++]);
-	if (lstat(current->name, &current->buf) < 0)
 	current->error = (lstat(current->name, &current->buf) < 0) ? 1 : 0;
 	if (!(tab[i]))
 		current->next = NULL;
@@ -183,7 +195,10 @@ void		all_args(char **tab, t_opt option)	/*taken directly from av in main, must 
 		if (tab[i] == 0)
 			current->next = NULL;
 	}
+	//print_list(args);	/*** this is where CORRECT date values are saved ***/
 	error_list(args);
 	printf("\n finished error list management \n");
 	regular_args(args, option);
+	printf("\n finished regular file list management \n");
+	//dir_args(args);
 }

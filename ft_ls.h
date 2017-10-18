@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/16 17:01:49 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/17 17:58:00 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,6 @@ t_files		*dir_args(t_files *args);
 void		display_errors(t_files *args);
 void		display_regular_args(t_files *args, t_opt option);
 void		does_not_exist(char *str);
-void		list_swap(t_files *head, t_files *a, t_files *b);
-t_files		*get_previous(t_files *head, t_files *a);
 
 /*
 typedef struct		s_elem	//to store details of each file read within directory stream
