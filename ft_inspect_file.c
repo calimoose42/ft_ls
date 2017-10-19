@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 10:47:26 by arohani           #+#    #+#             */
-/*   Updated: 2017/08/18 15:49:33 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/19 15:39:56 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,13 @@ int		main(int ac, char **av)
 		printf("Name: %s\n", av[i]);
 		if (lstat(av[i], &buf) < 0)
 			ft_putstr("stat error\n");
-		if (S_ISREG(buf.st_mode))
+		if (S_ISREG(buf.st_mode))		// 1) file mode
 			printf("Type: File\n");
-		else if (S_ISDIR(buf.st_mode))
-			printf("Type: Directory\n");
-		else if (S_ISLNK(buf.st_mode))
+		else if (S_ISDIR(buf.st_mode))	// 1) file mode
+			printf("Type: Directory\n");		//if dir and -l option, handle Total value before content display 
+		//the total number of 512-byte blocks used by the files in the directory is displayed on a line by itself, 
+		//immediately before the information for the files in the directory.
+		else if (S_ISLNK(buf.st_mode)). // 1) file mode
 			printf("Type: Symbolic Link\n");
 		printf("Modes: ");
 		printf((buf.st_mode & S_IRUSR) ? "r" : "-");
@@ -54,19 +56,19 @@ int		main(int ac, char **av)
 		printf((buf.st_mode & S_IROTH) ? "r" : "-");
 		printf((buf.st_mode & S_IWOTH) ? "w" : "-");
 		printf((buf.st_mode & S_IXOTH) ? "x" : "-");
-		printf("\nNumber of links: %d\n", buf.st_nlink);
-		if ((own = getpwuid(buf.st_uid)) == NULL)
+		printf("\nNumber of links: %d\n", buf.st_nlink);	// 2) Number of links
+		if ((own = getpwuid(buf.st_uid)) == NULL)			// 3) Owner Name
 			printf("getpwuid error\n");
-		printf("Owner: %s\n", own->pw_name);
-		if ((grp = getgrgid(buf.st_gid)) == NULL)
+		printf("Owner: %s\n", own->pw_name);				
+		if ((grp = getgrgid(buf.st_gid)) == NULL)			// 4) Group Name
 			printf("getgrgid error\n");
 		printf("Group: %s\n", grp->gr_name);
-		printf("Size: %lld octets\n", buf.st_size);
+		printf("Size: %lld bytes\n", buf.st_size);		// 5) number of bytes in the file (handle character special / block special exceptions)
 		date = ctime(&buf.st_mtime);
 		while (k < 16 && j < 13)
 			cleandate[j++] = date[k++];
 		cleandate[j] = '\0';
-		printf("Date last modified: %s\n", cleandate);
+		printf("Date last modified: %s\n", cleandate);	// 6) processed date
 		i++;
 	}
 	return 0;

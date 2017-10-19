@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 17:16:29 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/18 18:53:12 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/19 18:31:15 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,66 +16,6 @@
 /* -t sort OVERRIDES -r sort. Non-existant file error messages in ascending order regardless of options */
 /* -tr is reverse order of -t sorting */
 /* WORKS, including struct stat switch!! */
-
-/*
-t_files		*reverse_lex(t_files *list, t_opt option)
-{
-	char		*tmp_name;
-	t_files		*a;
-	t_files		*head;
-	t_files		*b;
-	struct stat	tmp_stat;
-
-	head = list;
-	a = list;
-	b = a->next;
-	print_list(head);
-	while (a && b)
-	{
-		while (b)
-		{
-			if (option.r == 0)
-			{
-					printf("\n BEFORE strcmp conditions : a->name = %s, b->name = %s\n", a->name, b->name);
-					if (ft_strcmp(a->name, b->name) > 0)
-					{
-						printf("\n BEFORE SWITCH : a->name = %s, b->name = %s\n", a->name, b->name);
-			//			printf("\ntmp->name now = %s\n", tmp->name);
-			//			printf("\nlist->name now = %s\n", list->name);
-			//			printf("\ncurrent name = %s\n", current->name);
-						//list_swap(head, a, b);
-						tmp_name = a->name;
-						a->name = b->name;
-						b->name = tmp_name;
-						tmp_stat = a->buf;
-						a->buf = b->buf;
-						b->buf = tmp_stat;
-						printf("\n AFTER SWITCH : a->name = %s, b->name = %s\n", a->name, b->name);
-					}
-			}
-			if (option.r == 1)
-			{	
-				if (ft_strcmp(a->name, b->name) < 0)
-				{
-					//list_swap(head, a, b);
-						tmp_name = a->name;
-						a->name = b->name;
-						b->name = tmp_name;
-						tmp_stat = a->buf;
-						a->buf = b->buf;
-						b->buf = tmp_stat;
-				}
-			}
-			printf("\nbefore incrementing b, b->next = %s\n", b->next->name);
-			b = b->next;
-		}
-		a = a->next;
-		b = a->next;
-	}
-	printf("\nHERE'S THE SORTED LIST\n");
-	print_list(head);
-	return (head);
-}*/
 
 t_files			*time_sort_list(t_files *list, t_opt option)
 {
@@ -135,8 +75,10 @@ t_files			*time_sort_list(t_files *list, t_opt option)
 	//	regular_args(head, option);
 	//	dir_args(head);
 		//return (head);
-	if (option.file == 1 || option.file == 0)
+	if ((option.file == 1 || option.file == 0) && option.l != 1)
 		display_regular_args(head, option);
+	else if (option.l == 1)
+		long_format(head, option);
 	return (NULL);
 }
 
@@ -184,7 +126,9 @@ t_files			*reverse_lex(t_files *list, t_opt option)
 	}
 	if (option.file == -1)
 		display_errors(head);
-	if (option.file == 1 || option.file == 0)
+	if ((option.file == 1 || option.file == 0) && option.l != 1)
 		display_regular_args(head, option);
+	else if (option.l == 1)
+		long_format(head, option);
 	return (NULL);
 }

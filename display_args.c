@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/12 17:58:24 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/18 18:59:55 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/19 17:22:02 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void		display_directories(t_files *args, t_opt option)
 */
 void		display_regular_args(t_files *args, t_opt option)	//after all necessary sorting
 {
+	if (option.l == 1)
+		long_format(args, option);
 	if (option.file == 0)
 		write(1, "\n", 1);
 	while (args)
