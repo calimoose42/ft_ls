@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/19 17:00:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/11/02 18:11:09 by arohani          ###   ########.fr       */
+/*   Updated: 2017/11/03 18:08:30 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void		long_format(t_files *list, t_opt option)
 	head = list;
 	max = column_size(head, 1);
 	max2 = column_size(head, 0);
-	while (list && option.file == 1)
+	while (list && list->error != 1 && option.file > 0)
 	{
 		i = 0;
 		j = 0;
@@ -140,8 +140,9 @@ void		long_format(t_files *list, t_opt option)
 	{
 		ft_putstr(list->name);
 		ft_putstr(":\n");
-		//	display_dir_contents();
-		write(1, "\n", 1);
+		dir_content_tab(list->name, option);
+		if (list->next)
+			write(1, "\n", 1);
 		list = list->next;
 	}	
 	if (option.l != 1)

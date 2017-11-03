@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/12 17:58:24 by arohani           #+#    #+#             */
-/*   Updated: 2017/11/03 15:25:56 by arohani          ###   ########.fr       */
+/*   Updated: 2017/11/03 17:05:47 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ void		display_directories(t_files *args, t_opt option)
 void		display_dir_content(t_files *list, t_opt option)
 {
 	if (option.l == 1)
+	{
+		//print_list(list);
 		long_format(list, option);
+	}
 	while (list && option.l == 0)
 	{
 		ft_putstr(list->name);

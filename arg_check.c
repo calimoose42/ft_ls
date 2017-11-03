@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 14:23:45 by arohani           #+#    #+#             */
-/*   Updated: 2017/11/03 15:03:21 by arohani          ###   ########.fr       */
+/*   Updated: 2017/11/03 18:08:08 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,16 @@
 
 void		print_list(t_files *args)
 {
-	//char	*date;
+	char	*date;
 	printf("About to print a list\n");
 	while (args != NULL)
 	{
-		/*if ((args->buf).st_mtimespec.tv_sec)
+		if ((args->buf).st_mtimespec.tv_sec)
 		{
 			date = ctime(&args->buf.st_mtimespec.tv_sec);
 			printf("time value for %s is %s\n%ld\n", args->name, date, (args->buf).st_mtimespec.tv_sec);
-		}
-		*/				
-		printf("%s\n", args->name);
+		}				
+		//printf("%s\n", args->name);
 		args = args->next;
 	}
 }
@@ -140,6 +139,7 @@ t_files			*error_list(t_files *args)
 				return (NULL);
 			errors = current;
 			current->name = args->name;
+			current->error = 1;
 			current->next = NULL;
 			first = 1;
 		}
@@ -152,6 +152,7 @@ t_files			*error_list(t_files *args)
 			if (!(current->next = (t_files *)malloc(sizeof(t_files))))
 				return (NULL);
 			current = current->next;
+			current->error = 1;
 			current->name = args->name;
 			current->next = NULL;
 		}
