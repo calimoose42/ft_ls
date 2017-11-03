@@ -6,7 +6,7 @@
 /*   By: arohani <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/13 18:31:37 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/04 14:40:07 by arohani          ###   ########.fr       */
+/*   Updated: 2017/11/02 17:53:20 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ char			*ft_strtrim(char const *s);
 char			**ft_strsplit(char const *s, char c);
 char			*ft_itoa(int n);
 void			ft_putchar(char c);
+void			ft_nputchar(char c, int n);
 void			ft_putstr(char const *s);
 void			ft_putendl(char const *s);
 void			ft_putnbr(int n);

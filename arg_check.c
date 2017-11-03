@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 14:23:45 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/19 14:37:21 by arohani          ###   ########.fr       */
+/*   Updated: 2017/11/03 15:03:21 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,18 @@
 
 void		print_list(t_files *args)
 {
-	char	*date;
+	//char	*date;
 	printf("About to print a list\n");
 	while (args != NULL)
 	{
-		if ((args->buf).st_mtimespec.tv_sec)
+		/*if ((args->buf).st_mtimespec.tv_sec)
 		{
 			date = ctime(&args->buf.st_mtimespec.tv_sec);
 			printf("time value for %s is %s\n%ld\n", args->name, date, (args->buf).st_mtimespec.tv_sec);
 		}
-						//printf("%s\n", args->name);
-/*		if (args->error == 1)
-			//does_not_exist(args->name);
-			printf("args->error = %d\n", args->error);
-*/		args = args->next;
+		*/				
+		printf("%s\n", args->name);
+		args = args->next;
 	}
 }
 

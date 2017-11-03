@@ -6,7 +6,7 @@
 #    By: arohani <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/19 14:41:24 by arohani           #+#    #+#              #
-#    Updated: 2017/10/04 14:37:10 by arohani          ###   ########.fr        #
+#    Updated: 2017/11/02 17:52:07 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ SRC = ft_atoi.c \
 	  ft_memmove.c \
 	  ft_memset.c \
 	  ft_putchar.c \
+	  ft_nputchar.c \
 	  ft_putchar_fd.c \
 	  ft_putendl.c \
 	  ft_putendl_fd.c \

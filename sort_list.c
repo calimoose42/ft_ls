@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 17:16:29 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/19 18:31:15 by arohani          ###   ########.fr       */
+/*   Updated: 2017/11/03 15:16:23 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ t_files			*time_sort_list(t_files *list, t_opt option)
 		//return (head);
 	if ((option.file == 1 || option.file == 0) && option.l != 1)
 		display_regular_args(head, option);
+	if (option.file == 2)
+		display_dir_content(head, option);	
 	else if (option.l == 1)
 		long_format(head, option);
 	return (NULL);
@@ -128,6 +130,8 @@ t_files			*reverse_lex(t_files *list, t_opt option)
 		display_errors(head);
 	if ((option.file == 1 || option.file == 0) && option.l != 1)
 		display_regular_args(head, option);
+	if (option.file == 2)
+		display_dir_content(head, option);
 	else if (option.l == 1)
 		long_format(head, option);
 	return (NULL);

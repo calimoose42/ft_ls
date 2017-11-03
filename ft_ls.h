@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/19 17:40:06 by arohani          ###   ########.fr       */
+/*   Updated: 2017/11/03 15:23:08 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,11 @@ void		display_regular_args(t_files *args, t_opt option);
 void		does_not_exist(char *str);
 void		display_directories(t_files *args, t_opt option);
 void		long_format(t_files *list, t_opt option);
+int			digits(int n);
+int			column_size(t_files *list, int link);
+void		dir_content_tab(char *str, t_opt option);
+t_files		*dir_content_list(char **tab, t_opt option);
+void		display_dir_content(t_files *list, t_opt option);
 
 /*
 typedef struct		s_elem	//to store details of each file read within directory stream

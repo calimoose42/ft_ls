@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 13:51:00 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/06 18:34:46 by arohani          ###   ########.fr       */
+/*   Updated: 2017/11/03 15:24:54 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	**sort_dir_content(char **dir_data, int r, int a)
 			i++;
 		dir_data[i] = 0;
 	}
-	ft_print_table(dir_data);
+	//ft_print_table(dir_data);
 	return (dir_data);
 }
 

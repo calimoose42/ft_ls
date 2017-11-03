@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:25:16 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/16 19:01:56 by arohani          ###   ########.fr       */
+/*   Updated: 2017/11/03 14:57:47 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ int		main(int ac, char **av)
 		//printf("\noption.a = %d\noption.r = %d\noption.t = %d\noption.rec = %d\noption.l = %d\n", option.a, option.r, option.t, option.rec, option.l);
 	}
 	if (!(av[i]))	//if no argument is passed, process separately
-		//sort_dir_content(stock_dir_content("."), option.r, option.a);
-		return (-1);
+		dir_content_tab(".", option);
 	else
 	{
 		tab = av + i;

@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/12 17:58:24 by arohani           #+#    #+#             */
-/*   Updated: 2017/10/19 17:22:02 by arohani          ###   ########.fr       */
+/*   Updated: 2017/11/03 15:25:56 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,19 @@ void		display_directories(t_files *args, t_opt option)
 	}
 }
 */
+
+void		display_dir_content(t_files *list, t_opt option)
+{
+	if (option.l == 1)
+		long_format(list, option);
+	while (list && option.l == 0)
+	{
+		ft_putstr(list->name);
+		write(1, "\n", 1);
+		list = list->next;
+	}
+}
+
 void		display_regular_args(t_files *args, t_opt option)	//after all necessary sorting
 {
 	if (option.l == 1)
@@ -42,7 +55,7 @@ void		display_regular_args(t_files *args, t_opt option)	//after all necessary so
 		if (option.file == 0)
 		{
 			ft_putstr(":\n");
-		//	display_dir_contents();
+			dir_content_tab(args->name, option);
 		}
 		else
 			write(1, "\n", 1);
