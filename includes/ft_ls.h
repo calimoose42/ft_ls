@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/11/03 17:16:54 by arohani          ###   ########.fr       */
+/*   Updated: 2017/11/06 14:35:50 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <uuid/uuid.h>
 # include <grp.h>
 # include <time.h>
-# include "libft/includes/libft.h"
+# include "../libft/includes/libft.h"
 
 /*typedef struct		s_list_ls
 {
