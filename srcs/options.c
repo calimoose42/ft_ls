@@ -24,7 +24,7 @@ void	illegal_option(char option)
 t_opt	scan_options(char *str)
 {
 	int 	i;
-	t_opt	option = {0, 0, 0, 0, 0, 0};
+	t_opt	option = {0, 0, 0, 0, 0, 0, 0};
 
 	i = 1;
 	while (str[i])

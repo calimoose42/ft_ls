@@ -34,10 +34,7 @@ void		display_directories(t_files *args, t_opt option)
 void		display_dir_content(t_files *list, t_opt option)
 {
 	if (option.l == 1)
-	{
-		//print_list(list);
 		long_format(list, option);
-	}
 	while (list && option.l == 0)
 	{
 		ft_putstr(list->name);
@@ -48,22 +45,36 @@ void		display_dir_content(t_files *list, t_opt option)
 
 void		display_regular_args(t_files *args, t_opt option)	//after all necessary sorting
 {
+	static int	file_check = 0;
+	int			single_dir_check = 0;
+
+	if (option.file == 1)
+		file_check++;
+	if (args->next == NULL && option.file == 0)
+		single_dir_check++;
 	if (option.l == 1)
 		long_format(args, option);
-	if (option.file == 0)
-		write(1, "\n", 1);
+	if (option.file == 0 && file_check != 0)
+		write(1, "\n\n", 2);
 	while (args)
 	{
-		ft_putstr(args->name);
-		if (option.file == 0)
+		if (option.file != 0)
+			ft_putstr(args->name);
+		else if (option.file == 0)
 		{
-			ft_putstr(":\n");
+			if (single_dir_check == 0)
+			{
+				ft_putstr(args->name);
+				ft_putstr(":\n");
+			}
 			dir_content_tab(args->name, option);
 		}
-		else
+		if (args->next)
 			write(1, "\n", 1);
 		args = args->next;
 	}
+	if (option.file != 1)
+		file_check = 0;
 }
 
 void		display_errors(t_files *args)

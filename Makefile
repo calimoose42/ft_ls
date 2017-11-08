@@ -6,7 +6,7 @@
 #    By: arohani <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/06 14:09:54 by arohani           #+#    #+#              #
-#    Updated: 2017/11/06 14:41:07 by arohani          ###   ########.fr        #
+#    Updated: 2017/11/07 11:55:15 by arohani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,8 +30,8 @@ all: $(NAME)
 
 $(NAME):
 	make -C libft/
-	gcc $(CFLAGS) -I includes -c $(addprefix $(SRC_DIR),$(SRC))
-	gcc $(CFLAGS) $(OBJ) libft/libft.a -o $(NAME)
+	gcc $(CFLAGS) -I srcs/includes -c $(addprefix $(SRC_DIR),$(SRC))
+	gcc $(CFLAGS) -o $(NAME) $(OBJ) -I libft/includes libft/libft.a
 	@echo "\n\t$(NAME) executable created\n"
 
 clean :

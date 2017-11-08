@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/18 12:22:58 by arohani           #+#    #+#             */
-/*   Updated: 2017/11/06 14:35:50 by arohani          ###   ########.fr       */
+/*   Updated: 2017/11/07 11:18:18 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <uuid/uuid.h>
 # include <grp.h>
 # include <time.h>
-# include "../libft/includes/libft.h"
+# include "../../libft/includes/libft.h"
 
 /*typedef struct		s_list_ls
 {
@@ -57,6 +57,7 @@ typedef struct		s_dir_data
 
 typedef struct		s_opt
 {
+	long 			block;
 	int				l;
 	int				r;
 	int				rec;
@@ -108,9 +109,10 @@ void		display_directories(t_files *args, t_opt option);
 void		long_format(t_files *list, t_opt option);
 int			digits(int n);
 int			column_size(t_files *list, int link);
-void		dir_content_tab(char *str, t_opt option);
+t_files		*dir_content_tab(char *str, t_opt option);
 t_files		*dir_content_list(char **tab, t_opt option, char *str);
 void		display_dir_content(t_files *list, t_opt option);
+t_opt		dir_block_size(t_files *list, t_opt option);
 
 /*
 typedef struct		s_elem	//to store details of each file read within directory stream

@@ -13,6 +13,18 @@
 #include "ft_ls.h"
 #include <stdio.h>
 
+t_opt		dir_block_size(t_files *list, t_opt option)
+{
+	while (list)
+	{
+		if (list->name[0] == '.')
+			list = list->next;
+		option.block += (long)(list->buf).st_blocks;
+		list = list->next;
+	}
+	return (option);
+}
+
 int			digits(int n)
 {
 	int		count;
@@ -67,6 +79,12 @@ void		long_format(t_files *list, t_opt option)
 	head = list;
 	max = column_size(head, 1);
 	max2 = column_size(head, 0);
+	if (list && list->error != 1 && option.file == 2)
+	{
+		ft_putstr("total ");
+		ft_putnbr(option.block);
+		ft_putchar('\n');
+	}
 	while (list && list->error != 1 && option.file > 0)
 	{
 		i = 0;
@@ -140,6 +158,9 @@ void		long_format(t_files *list, t_opt option)
 	{
 		ft_putstr(list->name);
 		ft_putstr(":\n");
+		ft_putstr("total ");
+		ft_putnbr(option.block);
+		ft_putchar('\n');
 		dir_content_tab(list->name, option);
 		if (list->next)
 			write(1, "\n", 1);
