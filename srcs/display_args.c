@@ -43,12 +43,38 @@ void		display_dir_content(t_files *list, t_opt option)
 	}
 }
 
-void		display_regular_args(t_files *args, t_opt option)	//after all necessary sorting
+void		display_regular_files(t_files *args, t_opt option)
 {
-	static int	file_check = 0;
-	int			single_dir_check = 0;
+	while (args)
+	{
+		ft_putstr(args->name);
+		ft_putchar('\n');
+		args = args->next;
+	}
+	if (option.combo == 1)
+		ft_putchar('\n');
+}
 
-	if (option.file == 1)
+void		display_directories(t_files *dirs, t_opt option)	//after all necessary sorting
+{
+	if (dirs->next == NULL && option.file == 0 && option.combo == 0)
+		dir_content_tab(dirs->name, option);
+	else
+	{
+		while (dirs)
+		{
+			option.parent = ft_strjoin(dirs->name, "/");
+			ft_putstr(dirs->name);
+			ft_putstr(":\n");
+			dir_content_tab(dirs->name, option);
+			if (dirs->next)
+				ft_putchar('\n');
+			dirs = dirs->next;
+		}
+	}
+}
+
+	/*if (option.file == 1)
 		file_check++;
 	if (args->next == NULL && option.file == 0)
 		single_dir_check++;
@@ -62,6 +88,7 @@ void		display_regular_args(t_files *args, t_opt option)	//after all necessary so
 			ft_putstr(args->name);
 		else if (option.file == 0)
 		{
+			option.parent = ft_strjoin(args->name, "/");
 			if (single_dir_check == 0)
 			{
 				ft_putstr(args->name);
@@ -76,7 +103,7 @@ void		display_regular_args(t_files *args, t_opt option)	//after all necessary so
 	if (option.file != 1)
 		file_check = 0;
 }
-
+*/
 void		display_errors(t_files *args)
 {
 	if (args)

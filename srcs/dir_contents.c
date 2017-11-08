@@ -18,10 +18,9 @@ t_files		*dir_content_list(char **tab, t_opt option, char *str)
 	int 		i;
 	t_files		*head = NULL;
 	t_files 	*current = NULL;
-	char		*parent = NULL;
 
 	i = 0;
-	parent = ft_strjoin(str, "/");
+	option.parent = (option.parent == NULL) ? ft_strjoin(str, "/") : option.parent;
 	while (tab[i] && option.a == 0 && tab[i][0] == '.')
 		i++;
 	if (!(tab[i]))
@@ -30,7 +29,7 @@ t_files		*dir_content_list(char **tab, t_opt option, char *str)
 		return (NULL);
 	head = current;
 	current->name = ft_strdup(tab[i++]);
-	current->path = ft_strjoin(parent, current->name);
+	current->path = ft_strjoin(option.parent, current->name);
 	current->error = (lstat(current->path, &current->buf) < 0) ? 1 : 0;
 	while (tab[i])
 	{
@@ -40,7 +39,7 @@ t_files		*dir_content_list(char **tab, t_opt option, char *str)
 			return (NULL);
 		current = current->next;
 		current->name = ft_strdup(tab[i++]);
-		current->path = ft_strjoin(parent, current->name);
+		current->path = ft_strjoin(option.parent, current->name);
 		current->error = (lstat(current->path, &current->buf) < 0) ? 1 : 0;
 		if (tab[i] == 0)
 			current->next = NULL;

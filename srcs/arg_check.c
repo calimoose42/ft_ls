@@ -29,7 +29,7 @@ void		print_list(t_files *args)
 	}
 }
 
-t_files		*dir_args(t_files *args, t_opt option) 	//no need for -a sorting here, but DONT FORGET IT once reaching directory content analysis
+t_files		*dir_args(t_files *args, t_opt option) 	//creates list of directories passed as argument and sends to sorting functions
 {
 	t_files		*dirs = NULL;
 	t_files		*current = NULL;
@@ -65,15 +65,12 @@ t_files		*dir_args(t_files *args, t_opt option) 	//no need for -a sorting here, 
 	if (dirs)
 	{
 		option.file = 0;
-		if (option.t == 1)
-			time_sort_list(dirs, option);
-		else if (option.t == 0)
-			reverse_lex(dirs, option);
+		(option.t == 1) ? time_sort_list(dirs, option) : reverse_lex(dirs, option);
 	}
 	return (NULL);
 }
 
-t_files		*regular_args(t_files *args, t_opt option)
+t_files		*regular_args(t_files *args, t_opt option) //creates list of files passed as argument and sends to sorting functions
 {
 	t_files		*regular;
 	t_files		*current = NULL;
@@ -105,20 +102,14 @@ t_files		*regular_args(t_files *args, t_opt option)
 			current->buf = args->buf;
 			current->next = NULL;
 			args = args->next;
-			//current = current->next;
-			//printf("INITIALIZED before starting time sort: time value for %s is %ld\n", regular->name, (regular->buf).st_mtimespec.tv_sec);
 		}
 		else
 			args = args->next;
 	}
-	// printf("2nd element name is %s, time value = %ld\n", regular->next->name, (regular->next->buf).st_mtimespec.tv_sec);
 	if (regular)
 	{
 		option.file = 1;
-		if (option.t == 1)
-			time_sort_list(regular, option);
-		else if (option.t == 0)
-			reverse_lex(regular, option);
+		(option.t == 1) ? time_sort_list(regular, option) : reverse_lex(regular, option);
 	}
 	return (NULL);
 }
@@ -128,7 +119,7 @@ t_files			*error_list(t_files *args)
 	t_files		*errors = NULL;
 	t_files		*current = NULL;
 	int			first;
-	t_opt		tmp = {-1, -1, -1, -1, -1, -1, -1};
+	t_opt		tmp = {NULL, -1, -1, -1, -1, -1, -1, -1, -1};
 
 	first = 0;
 	while (args && first != 1)
@@ -163,13 +154,37 @@ t_files			*error_list(t_files *args)
 	return (NULL);
 }
 
+t_opt		check_combo(t_files *list, t_opt option) //checks if both files and directories are passed, which influences display format
+{
+	int		file = 0;
+	int		dir = 0;
+
+	while (list)
+	{
+		while (list && list->error == 1)
+			list = list->next;
+		if (list && (S_ISDIR(list->buf.st_mode)))
+			dir++;
+		if (list && list->error == 0 && !(S_ISDIR(list->buf.st_mode)))
+			file++;
+		if (file > 0 && dir > 0)
+		{
+			option.combo = 1;
+			return (option);
+		}
+		list = list->next;
+	}
+	if (!(file > 0 && dir > 0))
+		option.combo = 0;
+	return (option);
+}
+
 void		all_args(char **tab, t_opt option)	/*taken directly from av in main, must store and sort, then if_exists, before ANY non-error displaying*/
 {
 	int 		i;
 	t_files		*args = NULL;
 	t_files 	*current = NULL;
 
-	//printf("DEBUG 1\n");
 	i = 0;
 	if (!(current = (t_files *)malloc(sizeof(t_files))))
 		return ;
@@ -178,25 +193,18 @@ void		all_args(char **tab, t_opt option)	/*taken directly from av in main, must 
 	current->error = (lstat(current->name, &current->buf) < 0) ? 1 : 0;
 	if (!(tab[i]))
 		current->next = NULL;
-	//printf("DEBUG 2\n");
 	while (tab[i])
 	{
 		if (!(current->next = (t_files *)malloc(sizeof(t_files))))
 			return ;
-		//printf("DEBUG 3\n");
 		current = current->next;
 		current->name = ft_strdup(tab[i++]);
 		current->error = (lstat(current->name, &current->buf) < 0) ? 1 : 0;
 		if (tab[i] == 0)
 			current->next = NULL;
-		//printf("DEBUG 4\n");
 	}
-	//print_list(args);	/*** this is where CORRECT date values are saved ***/
-	//printf("DEBUG 5\n");
+	option = check_combo(args, option);
 	error_list(args);
-	//printf("\n finished error list management \n");
 	regular_args(args, option);
-	//printf("\n finished regular file list management \n");
 	dir_args(args, option);
-	//printf("\n finished error list, reg list and dir list display, work on dir content next\n");
 }

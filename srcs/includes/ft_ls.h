@@ -57,6 +57,8 @@ typedef struct		s_dir_data
 
 typedef struct		s_opt
 {
+	char			*parent;
+	int				combo;
 	long 			block;
 	int				l;
 	int				r;
@@ -70,6 +72,7 @@ typedef struct		s_files
 {
 	char			*name;
 	char			*path;
+//	char			*parent;
 	char			perm[12];
 	int				error;
 	struct stat		buf;
@@ -96,6 +99,7 @@ char	**sort_dir_content(char **dir_data, int r, int a);
 t_dirs	*time_sort_dlist(t_dirs	*head, int r);
 */
 void		all_args(char **tab, t_opt option);
+t_opt		check_combo(t_files *list, t_opt option);
 t_files		*error_list(t_files *args);
 t_files		*reverse_lex(t_files *list, t_opt option);
 void		print_list(t_files *args);
@@ -103,7 +107,8 @@ t_files		*time_sort_list(t_files *list, t_opt option);
 t_files		*regular_args(t_files *args, t_opt option);
 t_files		*dir_args(t_files *args, t_opt option);
 void		display_errors(t_files *args);
-void		display_regular_args(t_files *args, t_opt option);
+void		display_regular_files(t_files *args, t_opt option);
+void		display_directories(t_files *dirs, t_opt option);
 void		does_not_exist(char *str);
 void		display_directories(t_files *args, t_opt option);
 void		long_format(t_files *list, t_opt option);

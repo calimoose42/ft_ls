@@ -67,7 +67,7 @@ int			column_size(t_files *list, int link)
 	return (dig);
 }
 
-void		long_format(t_files *list, t_opt option)
+void		long_format(t_files *list, t_opt option)	//NEED TO CLEAN UP AND HAVE SEPARATE FUNCTION FOR FILES VS DIRECTORY CONTENT
 {
 	t_files		*head = NULL;
 	int			i;

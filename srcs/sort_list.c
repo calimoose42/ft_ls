@@ -23,28 +23,15 @@ t_files			*time_sort_list(t_files *list, t_opt option)
 	t_files		*current;
 	char		*tmp_name;
 	struct stat tmp_stat;
-	//char		*date;
 	
-//	print_list(list);		/*** this is where we print 'time value' for each regular file ***/
 	head = list;
 	current = head->next;
 	while (list && current)
 	{
 		while (current)
 		{
-			// if (ft_strcmp("listdir.c", current->name) == 0)
-			// 	printf("file name = %s\nmod date = %ld\n", current->name, (current->buf).st_mtimespec.tv_sec);
-			// if (ft_strcmp("project_notes", current->name) == 0)
-			// 	printf("file name = %s\nmod date = %ld\n", current->name, (current->buf).st_mtimespec.tv_sec);
-			// date = ctime(&current->buf.st_mtimespec.tv_sec);
-			// printf("file name = %s\nmod date = %s\n", current->name, date);
-			//printf("INITIALIZED before starting time sort: time value for %s is %ld\n", current->name, (current->buf).st_mtimespec.tv_sec);
 			if (option.r == 0)
 			{	
-	//			if ((list->buf).st_mtimespec.tv_sec == (current->buf).st_mtimespec.tv_sec)
-	//			{
-	//				if ((list->buf).st_mtimensec.tv_nsec < (current->buf).st_mtimensec.tv_nsec)
-	//			}
 				if (list && current && ((list->buf).st_mtimespec.tv_sec < (current->buf).st_mtimespec.tv_sec))
 				{			
 					tmp_name = list->name;
@@ -72,15 +59,17 @@ t_files			*time_sort_list(t_files *list, t_opt option)
 		list = list->next;
 		current = list->next;
 	}
-	//	regular_args(head, option);
-	//	dir_args(head);
-		//return (head);
-	if ((option.file == 1 || option.file == 0) && option.l != 1)
+	(option.file == 1 && option.l != 1) ? display_regular_files(head, option) :
+	(option.file == 0 && option.l != 1) ? display_directories(head, option) :
+	(option.file == 2) ? display_dir_content(head, option) : long_format(head, option);
+	//(option.l == 1) ? long_format(head, option) : return (NULL);
+/*	if ((option.file == 1 || option.file == 0) && option.l != 1)
 		display_regular_args(head, option);
-	if (option.file == 2)
+	else if (option.file == 2)
 		display_dir_content(head, option);	
 	else if (option.l == 1)
 		long_format(head, option);
+	return (NULL); */
 	return (NULL);
 }
 
@@ -126,7 +115,10 @@ t_files			*reverse_lex(t_files *list, t_opt option)
 		list = list->next;
 		current = list->next;
 	}
-	if (option.file == -1)
+	(option.file == 1 && option.l != 1) ? display_regular_files(head, option) :
+	(option.file == 0 && option.l != 1) ? display_directories(head, option) :
+	(option.file == 2) ? display_dir_content(head, option) : long_format(head, option);
+	/*if (option.file == -1)
 		display_errors(head);
 	else if ((option.file == 1 || option.file == 0) && option.l != 1)
 		display_regular_args(head, option);
@@ -134,5 +126,6 @@ t_files			*reverse_lex(t_files *list, t_opt option)
 		display_dir_content(head, option);
 	else if (option.l == 1)
 		long_format(head, option);
+	return (NULL);*/
 	return (NULL);
 }

@@ -16,11 +16,14 @@
 int		main(int ac, char **av)
 {
 	char			**tab;
-	t_opt			option = {0, 0, 0, 0, 0, 0, 0};
+	t_opt			option = {NULL, 0, 0, 0, 0, 0, 0, 0, 0};
 	int				i = 1;
 
-	if (ac < 1)
-		ft_putstr("argument error in main\n");
+	if (ac < 1 || ft_strcmp(av[0], "./ft_ls"))
+	{
+		ft_putstr("not enough arguments or incorrect executable specified\n");
+		exit (-1);
+	}
 	while (av[i] && av[i][0] == '-')
 	{	
 		option = scan_options(av[i++]);
