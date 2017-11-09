@@ -15,16 +15,16 @@
 
 void		print_list(t_files *args)
 {
-	char	*date;
+	//char	*date;
 	printf("About to print a list\n");
 	while (args != NULL)
 	{
-		if ((args->buf).st_mtimespec.tv_sec)
-		{
-			date = ctime(&args->buf.st_mtimespec.tv_sec);
-			printf("time value for %s is %s\n%ld\n", args->name, date, (args->buf).st_mtimespec.tv_sec);
-		}				
-		//printf("%s\n", args->name);
+		//if ((args->buf).st_mtimespec.tv_sec)
+		//{
+			//date = ctime(&args->buf.st_mtimespec.tv_sec);
+			//printf("time value for %s is %s\n%ld\n", args->name, date, (args->buf).st_mtimespec.tv_sec);
+		//}				
+		printf("%s\n", args->name);
 		args = args->next;
 	}
 }
@@ -119,7 +119,7 @@ t_files			*error_list(t_files *args)
 	t_files		*errors = NULL;
 	t_files		*current = NULL;
 	int			first;
-	t_opt		tmp = {NULL, -1, -1, -1, -1, -1, -1, -1, -1};
+	t_opt		tmp = {NULL, NULL, -1, -1, -1, -1, -1, -1, -1, -1};
 
 	first = 0;
 	while (args && first != 1)
@@ -154,12 +154,12 @@ t_files			*error_list(t_files *args)
 	return (NULL);
 }
 
-t_opt		check_combo(t_files *list, t_opt option) //checks if both files and directories are passed, which influences display format
+t_opt		check_combo(t_files *list, t_opt option) //checks if both files and directories are passed as arg, which influences display format
 {
 	int		file = 0;
 	int		dir = 0;
 
-	while (list)
+	while (list && option.file != 2)
 	{
 		while (list && list->error == 1)
 			list = list->next;

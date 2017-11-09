@@ -55,24 +55,11 @@ typedef struct		s_dir_data
 	char			special_date[12];
 }					t_dir_data;
 
-typedef struct		s_opt
-{
-	char			*parent;
-	int				combo;
-	long 			block;
-	int				l;
-	int				r;
-	int				rec;
-	int				a;
-	int				t;
-	int				file; //-1 for error list, 1 for file list, 0 for dir list, 2 for dir contents
-}					t_opt;
-
 typedef struct		s_files
 {
 	char			*name;
 	char			*path;
-//	char			*parent;
+	char			*parent;
 	char			perm[12];
 	int				error;
 	struct stat		buf;
@@ -84,6 +71,20 @@ typedef struct		s_files
 	char			special_date[12];
 	struct s_files	*next;
 }					t_files;
+
+typedef struct		s_opt
+{
+	char			*parent;
+	t_files			*R_par;
+	int				combo;
+	long 			block;
+	int				l;
+	int				r;
+	int				rec;
+	int				a;
+	int				t;
+	int				file; //-1 for error list, 1 for file list, 0 for dir list, 2 for dir contents
+}					t_opt;
 
 t_opt	scan_options(char *str);
 /* int 	dir_total(char **tab, int file_check);
@@ -104,8 +105,10 @@ t_files		*error_list(t_files *args);
 t_files		*reverse_lex(t_files *list, t_opt option);
 void		print_list(t_files *args);
 t_files		*time_sort_list(t_files *list, t_opt option);
+void		switch_list_content(t_files *a, t_files *b);
 t_files		*regular_args(t_files *args, t_opt option);
 t_files		*dir_args(t_files *args, t_opt option);
+t_files		*dir_recursive(t_files *sub_dirs, t_opt option);
 void		display_errors(t_files *args);
 void		display_regular_files(t_files *args, t_opt option);
 void		display_directories(t_files *dirs, t_opt option);

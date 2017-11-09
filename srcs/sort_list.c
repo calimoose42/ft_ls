@@ -17,12 +17,23 @@
 /* -tr is reverse order of -t sorting */
 /* WORKS, including struct stat switch!! */
 
+void			switch_list_content(t_files *a, t_files *b)
+{
+	char		*tmp_name;
+	struct stat tmp_stat;
+
+	tmp_name = a->name;
+	a->name = b->name;
+	b->name = tmp_name;
+	tmp_stat = a->buf;
+	a->buf = b->buf;
+	b->buf = tmp_stat;
+}
+
 t_files			*time_sort_list(t_files *list, t_opt option)
 {
 	t_files 	*head;
 	t_files		*current;
-	char		*tmp_name;
-	struct stat tmp_stat;
 	
 	head = list;
 	current = head->next;
@@ -31,54 +42,29 @@ t_files			*time_sort_list(t_files *list, t_opt option)
 		while (current)
 		{
 			if (option.r == 0)
-			{	
 				if (list && current && ((list->buf).st_mtimespec.tv_sec < (current->buf).st_mtimespec.tv_sec))
-				{			
-					tmp_name = list->name;
-					list->name = current->name;
-					current->name = tmp_name;
-					tmp_stat = list->buf;
-					list->buf = current->buf;
-					current->buf = tmp_stat;		
-				}
-			}
-			else if (option.r == 1)
-			{
+					switch_list_content(list, current);
+			if (option.r == 1)
 				if (list && current && ((list->buf).st_mtimespec.tv_sec > (current->buf).st_mtimespec.tv_sec))
-				{					
-					tmp_name = list->name;
-					list->name = current->name;
-					current->name = tmp_name;
-					tmp_stat = list->buf;
-					list->buf = current->buf;
-					current->buf = tmp_stat;					
-				}
-			}
+					switch_list_content(list, current);
 			current = current->next;
 		}
 		list = list->next;
 		current = list->next;
 	}
+	if (option.rec == 1)
+		return (head);
 	(option.file == 1 && option.l != 1) ? display_regular_files(head, option) :
 	(option.file == 0 && option.l != 1) ? display_directories(head, option) :
 	(option.file == 2) ? display_dir_content(head, option) : long_format(head, option);
 	//(option.l == 1) ? long_format(head, option) : return (NULL);
-/*	if ((option.file == 1 || option.file == 0) && option.l != 1)
-		display_regular_args(head, option);
-	else if (option.file == 2)
-		display_dir_content(head, option);	
-	else if (option.l == 1)
-		long_format(head, option);
-	return (NULL); */
 	return (NULL);
 }
 
 t_files			*reverse_lex(t_files *list, t_opt option)
 {
-	char		*tmp_name;
 	t_files		*current;
 	t_files		*head;
-	struct stat	tmp_stat;
 
 	head = list;
 	current = list->next;
@@ -87,45 +73,20 @@ t_files			*reverse_lex(t_files *list, t_opt option)
 		while (current)
 		{
 			if (option.r == 0 || option.r == -1)
-			{
 				if (ft_strcmp(list->name, current->name) > 0)
-				{
-					tmp_name = list->name;
-					list->name = current->name;
-					current->name = tmp_name;
-					tmp_stat = list->buf;
-					list->buf = current->buf;
-					current->buf = tmp_stat;
-				}
-			}
-			else if (option.r == 1)
-			{
+					switch_list_content(list, current);
+			if (option.r == 1)
 				if (ft_strcmp(list->name, current->name) < 0)
-				{
-					tmp_name = list->name;
-					list->name = current->name;
-					current->name = tmp_name;
-					tmp_stat = list->buf;
-					list->buf = current->buf;
-					current->buf = tmp_stat;
-				}
-			}
+					switch_list_content(list, current);
 			current = current->next;
 		}
 		list = list->next;
 		current = list->next;
 	}
+	if (option.rec == 1)
+		return (head);
 	(option.file == 1 && option.l != 1) ? display_regular_files(head, option) :
 	(option.file == 0 && option.l != 1) ? display_directories(head, option) :
 	(option.file == 2) ? display_dir_content(head, option) : long_format(head, option);
-	/*if (option.file == -1)
-		display_errors(head);
-	else if ((option.file == 1 || option.file == 0) && option.l != 1)
-		display_regular_args(head, option);
-	else if (option.file == 2)
-		display_dir_content(head, option);
-	else if (option.l == 1)
-		long_format(head, option);
-	return (NULL);*/
 	return (NULL);
 }
