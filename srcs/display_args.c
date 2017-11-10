@@ -64,7 +64,7 @@ void		display_directories(t_files *dirs, t_opt option)	//after all necessary sor
 				str = ft_strjoin(dirs->path, dirs->name);
 				(option.rec == 1) ? ft_putstr(str) : ft_putstr(dirs->name);
 				ft_putstr(":\n");
-				printf("passing str %s to dir content tab\n", str);
+				//printf("passing str %s to dir content tab\n", str);
 				(option.rec == 1) ? dir_content_tab(str, option) : dir_content_tab(dirs->name, option);
 				if (dirs->next && option.rec == 0)
 					ft_putchar('\n');

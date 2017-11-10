@@ -62,7 +62,9 @@ t_files		*dir_args(t_files *args, t_opt option) 	//creates list of directories p
 		else
 			args = args->next;
 	}
-	if (dirs)
+	if (dirs && option.R_args == 1)
+		dir_recursive(dirs, option);	//sends dirs passed as argument to recursive as sub_head
+	else if (dirs)
 	{
 		option.file = 0;
 		(option.t == 1) ? time_sort_list(dirs, option) : reverse_lex(dirs, option);
@@ -119,7 +121,7 @@ t_files			*error_list(t_files *args)
 	t_files		*errors = NULL;
 	t_files		*current = NULL;
 	int			first;
-	t_opt		tmp = {NULL, NULL, -1, -1, -1, -1, -1, -1, -1, -1};
+	t_opt		tmp = {NULL, NULL, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 
 	first = 0;
 	while (args && first != 1)

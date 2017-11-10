@@ -16,7 +16,7 @@
 int		main(int ac, char **av)
 {
 	char			**tab;
-	t_opt			option = {NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0};
+	t_opt			option = {NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int				i = 1;
 
 	if (ac < 1 || ft_strcmp(av[0], "./ft_ls"))
@@ -34,6 +34,7 @@ int		main(int ac, char **av)
 	else
 	{
 		tab = av + i;
+		option.R_args = 1;
 		all_args(tab, option);
 //		files = regular_args(all_args(tab));
 	//	display_errors(arguments, option);
