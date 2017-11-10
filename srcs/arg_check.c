@@ -121,7 +121,7 @@ t_files			*error_list(t_files *args)
 	t_files		*errors = NULL;
 	t_files		*current = NULL;
 	int			first;
-	t_opt		tmp = {NULL, NULL, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+	t_opt		tmp = {NULL, NULL, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 
 	first = 0;
 	while (args && first != 1)

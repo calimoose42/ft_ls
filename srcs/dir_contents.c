@@ -21,20 +21,37 @@ t_files		*dir_recursive(t_files *sub_dirs, t_opt option) 	//handles recursive af
 //	sorted = dir_args(head, option); //should have sorted list of directories within analyzed directory, need to
 	option.R_par = (option.R_par == NULL) ? sub_dirs : option.R_par;
 	if (sub_dirs != NULL)
-		sorted = (option.t == 1) ? time_sort_list(sub_dirs, option) : reverse_lex(sub_dirs, option);
-	else if (option.R_par != NULL)
-	{	
-		option.R_par = option.R_par->next;
-		sub_dirs = option.R_par;
+	{
+		//printf("the following sub-directory list is sent for sorting : \n");
+		//print_list(sub_dirs);
 		sorted = (option.t == 1) ? time_sort_list(sub_dirs, option) : reverse_lex(sub_dirs, option);
 	}
-	else
-		return (NULL);
+//	else if (sub_dirs == NULL && sub_dirs->next != NULL)
+//		sub_dirs = sub_dirs->next;
+	else if (option.R_par != NULL && sub_dirs == NULL)
+	{	
+		option.R_par = option.R_par->next;
+		//if (sub_dirs->next != NULL)
+		//	printf("next sub_directory is %s\n", sub_dirs->next->name);
+		sub_dirs = option.R_par;
+		if (sub_dirs == NULL)
+		{
+			//printf("MASTER DEBUG\n");
+			exit(0);
+		}
+		printf("the following sub-directory list is sent for sorting : \n");
+		print_list(sub_dirs);		
+		sorted = (option.t == 1) ? time_sort_list(sub_dirs, option) : reverse_lex(sub_dirs, option);
+	}
 	//printf("DEBUG 1\n");
 	//print_list(sorted);
 	while (sorted)
 	{
 		//printf("DEBUG 2\n");
+		//printf("FEEDING THE FOLLOWING LIST TO display directories FROM dir recursive\n");
+		if (sorted && sorted->next)
+			printf("SORTED->NAME = %s\nSORTED->next->NAME =%s\n", sorted->name, sorted->next->name);
+		/*last time sorted->name and sorted->next->name mentioned when s->next->name = no_perms...*/
 		display_directories(sorted, option);
 		sorted = sorted->next;
 	}
@@ -51,10 +68,23 @@ t_files		*dir_content_list(char **tab, t_opt option, char *str)
 
 	i = 0;
 	option.parent = ft_strjoin(str, "/");
+	printf("option.parent = %s\n", option.parent);
 	while (tab[i] && option.a == 0 && tab[i][0] == '.')
+	{
 		i++;
-	if (!(tab[i]))
-		return (NULL);
+	}
+	if (!(tab[i])) //MAIN DIFFERENCE WITH OLD dir_content_list ls that showed no_perm
+	{
+		if (option.rec == 1)
+		{
+		//	if (sub_head == NULL)
+		//		printf("sub_head is null before feeding to dir recursive\n");
+		//	printf("feeding recursively into dir_recursive with following list : \n");
+			//print_list(sub_head);
+			display_dir_content(head, option);
+			dir_recursive(sub_head, option);
+		}
+	}
 	if (!(current = (t_files *)malloc(sizeof(t_files))))
 		return (NULL);
 	head = current;
@@ -65,7 +95,6 @@ t_files		*dir_content_list(char **tab, t_opt option, char *str)
 	current->next = NULL;
 	if (S_ISDIR(current->buf.st_mode))
 	{	
-		//printf("DEBUG DIR 1\n");
 		if (!(sub_dir = (t_files *)malloc(sizeof(t_files))))
 			return (NULL);
 		sub_dir->name = ft_strdup(current->name);
@@ -120,12 +149,11 @@ t_files		*dir_content_list(char **tab, t_opt option, char *str)
 	option = check_combo(head, option);
 	if (option.rec == 1)
 	{
-		printf("feeding recursively into dir_recursive with following list : \n");
-		//print_list(sub_head);
+	//	printf("feeding recursively into dir_recursive with following list : \n");
 		display_dir_content(head, option);
 		dir_recursive(sub_head, option);
 	}
-	else if (head)
+	if (head)
 		(option.t == 1) ? time_sort_list(head, option) : reverse_lex(head, option);
 	return (head);
 }
@@ -140,7 +168,6 @@ t_files		*dir_content_tab(char *str, t_opt option)
 
 	len = 1;
 	dirp = opendir(str);
-//	printf("DEBUG 1\n");
 	if (dirp == NULL)
 	{
 		ft_putstr("ft_ls: ");
@@ -157,12 +184,12 @@ t_files		*dir_content_tab(char *str, t_opt option)
 //	printf("DEBUG 4\n");
 	tab[len - 1] = 0;
 	len = 0;
-	closedir(dirp);
+	if (dirp != NULL)
+		closedir(dirp);
 //	printf("DEBUG 5\n");
 	dirp = opendir(str);
 	while ((dstream = readdir(dirp)) != NULL)
 	{
-//		printf("DEBUG 6\n");
 		if (!(tab[len] = (char *)malloc(sizeof(char) * (ft_strlen(dstream->d_name) + 1))))
 			return (NULL);
 		tab[len++] = dstream->d_name;

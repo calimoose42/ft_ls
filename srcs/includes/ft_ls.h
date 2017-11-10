@@ -76,6 +76,7 @@ typedef struct		s_opt
 {
 	char			*parent;
 	t_files			*R_par;
+	int				no_perm;
 	int				R_args;
 	int				combo;
 	long 			block;

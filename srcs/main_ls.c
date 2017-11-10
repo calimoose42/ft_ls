@@ -16,7 +16,7 @@
 int		main(int ac, char **av)
 {
 	char			**tab;
-	t_opt			option = {NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	t_opt			option = {NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int				i = 1;
 
 	if (ac < 1 || ft_strcmp(av[0], "./ft_ls"))

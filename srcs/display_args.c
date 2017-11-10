@@ -50,9 +50,13 @@ void		display_directories(t_files *dirs, t_opt option)	//after all necessary sor
 	char	*str;
 
 	if (dirs)
+		printf("option.parent = %s\ndirs->path = %s\n", option.parent, dirs->path);
+	if (dirs)
 	{
 		if (dirs->next == NULL && option.file == 0 && option.combo == 0 && option.rec == 0)
+		{
 			(option.rec == 1) ? dir_content_tab(ft_strjoin(option.parent, dirs->name), option) : dir_content_tab(dirs->name, option);
+		}
 		else
 		{
 			while (dirs)
@@ -61,18 +65,25 @@ void		display_directories(t_files *dirs, t_opt option)	//after all necessary sor
 					ft_putchar('\n');
 				//option.parent = ft_strjoin(dirs->name, "/");
 				//printf("\noption.parent = %s\n", option.parent);
+				printf("dirs->name = %s\n", dirs->name);
 				str = ft_strjoin(dirs->path, dirs->name);
+				printf("str fed to dir content tab is %s\n", str);
 				(option.rec == 1) ? ft_putstr(str) : ft_putstr(dirs->name);
 				ft_putstr(":\n");
 				//printf("passing str %s to dir content tab\n", str);
 				(option.rec == 1) ? dir_content_tab(str, option) : dir_content_tab(dirs->name, option);
 				if (dirs->next && option.rec == 0)
+				{
 					ft_putchar('\n');
+					dirs = dirs->next;
+				}
 				//free(option.parent);
-				dirs = dirs->next;
+				//dirs = dirs->next;
 			}
 		}
 	}
+	if (!(dirs))
+		ft_putchar('\n');
 }
 
 void		display_errors(t_files *args)
