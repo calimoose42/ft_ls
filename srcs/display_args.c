@@ -22,7 +22,6 @@ void		does_not_exist(char *str)	/*must be fed arguments that are already sorted*
 
 void		display_dir_content(t_files *list, t_opt option)
 {
-	//printf("DEBUG 1 DISPLAY DIR CONTENT\n");
 	if (option.l == 1)
 		long_format(list, option);
 	while (list && option.l == 0)
@@ -50,35 +49,28 @@ void		display_directories(t_files *dirs, t_opt option)	//after all necessary sor
 	char	*str;
 
 	if (dirs)
-		printf("option.parent = %s\ndirs->path = %s\n", option.parent, dirs->path);
-	if (dirs)
 	{
 		if (dirs->next == NULL && option.file == 0 && option.combo == 0 && option.rec == 0)
 		{
 			(option.rec == 1) ? dir_content_tab(ft_strjoin(option.parent, dirs->name), option) : dir_content_tab(dirs->name, option);
-		}
+		}	//directory contents list returned to this function, though we don't store this list or do anything with it here
 		else
 		{
 			while (dirs)
 			{
 				if (option.rec == 1)
 					ft_putchar('\n');
-				//option.parent = ft_strjoin(dirs->name, "/");
-				//printf("\noption.parent = %s\n", option.parent);
-				printf("dirs->name = %s\n", dirs->name);
 				str = ft_strjoin(dirs->path, dirs->name);
-				printf("str fed to dir content tab is %s\n", str);
 				(option.rec == 1) ? ft_putstr(str) : ft_putstr(dirs->name);
 				ft_putstr(":\n");
-				//printf("passing str %s to dir content tab\n", str);
 				(option.rec == 1) ? dir_content_tab(str, option) : dir_content_tab(dirs->name, option);
 				if (dirs->next && option.rec == 0)
 				{
 					ft_putchar('\n');
 					dirs = dirs->next;
 				}
-				//free(option.parent);
-				//dirs = dirs->next;
+				else if (dirs->next && option.rec == 1) //to advance through dirs if recursive (with no_perm, was constant loop until adding this else if)
+					dirs = dirs->next;
 			}
 		}
 	}
