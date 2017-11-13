@@ -71,11 +71,13 @@ void		display_directories(t_files *dirs, t_opt option)	//after all necessary sor
 				}
 				else if (dirs->next && option.rec == 1) //to advance through dirs if recursive (with no_perm, was constant loop until adding this else if)
 					dirs = dirs->next;
+				else if (option.rec == 0)
+					dirs = dirs->next;
 			}
 		}
 	}
-	if (!(dirs))
-		ft_putchar('\n');
+	//if (!(dirs))
+	//	ft_putchar('\n');
 }
 
 void		display_errors(t_files *args)

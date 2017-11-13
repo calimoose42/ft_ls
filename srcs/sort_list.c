@@ -56,7 +56,7 @@ t_files			*time_sort_list(t_files *list, t_opt option)
 	if (option.rec == 1)
 		return (head);
 	(option.file == 1 && option.l != 1) ? display_regular_files(head, option) :
-	(option.file == 0 && option.l != 1) ? display_directories(head, option) :
+	(option.file == 0) ? display_directories(head, option) :
 	(option.file == 2) ? display_dir_content(head, option) : long_format(head, option);
 	//(option.l == 1) ? long_format(head, option) : return (NULL);
 	return (NULL);
@@ -87,7 +87,7 @@ t_files			*reverse_lex(t_files *list, t_opt option)
 	if (option.rec == 1)
 		return (head);
 	(option.file == 1 && option.l != 1) ? display_regular_files(head, option) :
-	(option.file == 0 && option.l != 1) ? display_directories(head, option) :
+	(option.file == 0) ? display_directories(head, option) :
 	(option.file == 2) ? display_dir_content(head, option) : long_format(head, option);
 	return (NULL);
 }

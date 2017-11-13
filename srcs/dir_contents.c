@@ -88,7 +88,7 @@ t_files		*dir_content_list(char **tab, t_opt option, char *str)
 	{
 		i++;	//handles -a
 	}
-	if (!(tab[i])) //MAIN DIFFERENCE WITH OLD dir_content_list ls that showed no_perm
+	if (!(tab[i])) 
 	{
 		/*if table doesnt exist i.e. only includes hidden files if -a not activated, or is a directory with no file-permissions  */
 		if (option.rec == 1)
@@ -211,7 +211,7 @@ t_files		*dir_content_tab(char *str, t_opt option)
 	{
 		if (!(tab[len] = (char *)malloc(sizeof(char) * (ft_strlen(dstream->d_name) + 1))))
 			return (NULL);
-		tab[len++] = dstream->d_name;
+		tab[len++] = ft_strdup(dstream->d_name); //without strdup causes issues i.e. with /dev
 	}
 	closedir(dirp);
 	option.file = 2;
