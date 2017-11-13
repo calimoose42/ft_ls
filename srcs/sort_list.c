@@ -12,6 +12,7 @@
 
 #include "ft_ls.h"
 #include <stdio.h>
+#include <string.h>
 
 /* -t sort OVERRIDES -r sort. Non-existant file error messages in ascending order regardless of options */
 /* -tr is reverse order of -t sorting */
@@ -72,7 +73,7 @@ t_files			*reverse_lex(t_files *list, t_opt option)
 	{
 		while (current)
 		{
-			if (option.r == 0 || option.r == -1)
+			if (option.r == 0 || option.r == -1)		//if no reverse, or to manage non-existant files, regular lexographic
 				if (ft_strcmp(list->name, current->name) > 0)
 					switch_list_content(list, current);
 			if (option.r == 1)

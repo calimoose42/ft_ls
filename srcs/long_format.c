@@ -15,16 +15,19 @@
 
 t_opt		dir_block_size(t_files *list, t_opt option)
 {
+	long 	tmp = 0;
+
 	while (list)
 	{
 		while (list->name[0] == '.')
 			list = list->next;
 		if (list)
 		{
-			option.block += (long)(list->buf).st_blocks;
+			tmp += (long)(list->buf).st_blocks;
 			list = list->next;
 		}
 	}
+	option.block = tmp;
 	return (option);
 }
 
