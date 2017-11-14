@@ -69,6 +69,7 @@ typedef struct		s_files
 	char			*raw_date;
 	char			cleandate[13];
 	char			special_date[12];
+	struct s_files 	*next_parent;		//FIND A WAY TO USE THIS TO STOCK AND INCREMENT PARENT DIRECTORY OF EVERY SUB-DIRECTORY
 	struct s_files	*next;
 }					t_files;
 
@@ -88,19 +89,7 @@ typedef struct		s_opt
 	int				file; //-1 for error list, 1 for file list, 0 for dir list, 2 for dir contents
 }					t_opt;
 
-t_opt	scan_options(char *str);
-/* int 	dir_total(char **tab, int file_check);
-char	**dir_tab(char	**tab);
-char	**sort_dir_tab(char **dir, int r);
-t_dirs	*stock_dlist(char **dir, int t, int r);
-char	**files_tab(char **tab);
-char	**sort_files_tab(char **files, int r);
-t_files	*stock_flist(char **files);
-char	**stock_dir_content(char *str);
-void	stock_from_dlist(t_dirs *dlist, int r, int a);
-char	**sort_dir_content(char **dir_data, int r, int a);
-t_dirs	*time_sort_dlist(t_dirs	*head, int r);
-*/
+t_opt		scan_options(char *str);
 void		all_args(char **tab, t_opt option);
 t_opt		check_combo(t_files *list, t_opt option);
 t_files		*error_list(t_files *args);
