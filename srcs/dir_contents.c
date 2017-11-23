@@ -15,6 +15,41 @@
 
 t_files		*dir_recursive(t_files *sub_dirs, t_opt option) 	
 {
+	/* NEED SOMETHING LIKE : 
+	** if (sub_dirs->next == NULL && (sub_next))
+	** { 
+			sub_dirs->next_parent = sub_next; i.e. to stock "no_perm, TESTdir" in sub_dirs and recall once sub_dirs completely analyzed
+			sub_next = sub_next->next;
+			...........
+		}
+	*/
+	printf("\nat top of recursive, option.parent = %s\nsub_dirs list = \n", option.parent);
+	print_list(sub_dirs);
+	printf("\n");
+	t_files			*sorted = NULL;		//to store sorted sub_dir list which will be feed to disiplay or option.l
+	t_files			*dirs = NULL;
+
+	if (sub_dirs != NULL)
+		sorted = (option.t == 1) ? time_sort_list(sub_dirs, option) : reverse_lex(sub_dirs, option);
+	if (sorted == NULL)
+	{
+		printf("returning NULL when option.parent = %s\n", option.parent);
+		return (NULL);
+	}
+	while (sorted)
+	{
+		if (S_ISDIR(sorted->buf.st_mode))
+		{
+			printf("\npath is: %s\nfolder name is: %s\n\n", sorted->path, sorted->name);
+			dirs = dir_content_tab(ft_strjoin(sorted->path, sorted->name), option);
+		}
+		sorted = sorted->next;
+	}
+	return (NULL);
+}
+
+/*t_files		*dir_recursive(t_files *sub_dirs, t_opt option) 	
+{
 	t_files			*sorted = NULL;		//to store sorted sub_dir list which will be feed to disiplay or option.l
 	static t_files	*sub_next = NULL;
 	static int 		last = 0;
@@ -24,7 +59,6 @@ t_files		*dir_recursive(t_files *sub_dirs, t_opt option)
 //		option.R_par = option.R_par->next;
 	if (sub_dirs != NULL)
 	{
-		/* if sub_directory list exists, then sort it */
 		sorted = (option.t == 1) ? time_sort_list(sub_dirs, option) : reverse_lex(sub_dirs, option);
 	}
 	else if (sub_dirs == NULL && sub_next != NULL)
@@ -41,7 +75,6 @@ t_files		*dir_recursive(t_files *sub_dirs, t_opt option)
 	}
 	else if (option.R_par != NULL && sub_dirs == NULL && sorted == NULL)
 	{	
-		/* if sub_directory list DOESN'T exist, but parent_directory DOES (i.e. parent_directory had no permissions or didn't contain any sub-directories) */
 		if (option.R_par->next)
 			option.R_par = option.R_par->next;	//advance to next parent-directory item (i.e. from libft to srcs)
 		else	//i.e. very last root sub-directory found, must recursively analyze... (originally had exit here)
@@ -52,12 +85,7 @@ t_files		*dir_recursive(t_files *sub_dirs, t_opt option)
 			dir_recursive(sub_dirs, option);
 		}
 		sub_dirs = option.R_par;
-	/*	if (sub_dirs == NULL)
-		{
-			//printf("MASTER DEBUG\n");
-			exit(0);
-		}	
-	*/	sorted = (option.t == 1) ? time_sort_list(sub_dirs, option) : reverse_lex(sub_dirs, option);
+		sorted = (option.t == 1) ? time_sort_list(sub_dirs, option) : reverse_lex(sub_dirs, option);
 	}
 	else if (option.R_par == NULL && sub_dirs == NULL && sorted == NULL)
 		exit(0);	//exits once all sub-directories have been analyzed and displayed
@@ -72,7 +100,7 @@ t_files		*dir_recursive(t_files *sub_dirs, t_opt option)
 	}
 	return (NULL);
 }
-
+*/
 t_files		*dir_content_list(char **tab, t_opt option, char *str)
 {
 	int 		i;
@@ -171,7 +199,7 @@ t_files		*dir_content_list(char **tab, t_opt option, char *str)
 	return (head);
 }
 
-t_files		*dir_content_tab(char *str, t_opt option)
+t_files		dir_content_tab(char *str, t_opt option)
 {
 	struct dirent 	*dstream;
 	DIR 			*dirp = NULL;

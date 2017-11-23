@@ -48,6 +48,7 @@ void		display_directories(t_files *dirs, t_opt option)	//after all necessary sor
 {
 	char	*str;
 
+	printf("option.parent in display_directories = %s\n", option.parent);
 	if (dirs)
 	{
 		if (dirs->next == NULL && option.file == 0 && option.combo == 0 && option.rec == 0)
