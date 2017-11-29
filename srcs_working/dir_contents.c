@@ -162,8 +162,8 @@ t_files		*dir_content_list(char **tab, t_opt option, char *str)
 		return (NULL);
 	/* reach this part of function if all hidden files are ignored and there are still additional contents within the parent folder */
 	head = current;
-	current->name = ft_strdup(tab[i++]);
-	current->path = ft_strdup(option.parent);
+	ft_strcpy(current->name, tab[i++]);
+	ft_strcpy(current->path, option.parent);
 	current->error = (lstat(ft_strjoin(current->path, current->name), &current->buf) < 0) ? 1 : 0;	//STORES stat struct for each file, using full path of file to properly get recognized by lstat
 	current->next = NULL;
 	if (S_ISDIR(current->buf.st_mode))
@@ -171,9 +171,9 @@ t_files		*dir_content_list(char **tab, t_opt option, char *str)
 		/* enter here to initialize sub_directory list if first non-hidden item is a directory */
 		if (!(sub_dir = (t_files *)malloc(sizeof(t_files))))
 			return (NULL);
-		sub_dir->name = ft_strdup(current->name);
+		ft_strcpy(sub_dir->name, current->name);
 		sub_dir->buf = current->buf;
-		sub_dir->path = ft_strdup(current->path);
+		ft_strcpy(sub_dir->path, current->path);
 		sub_dir->next = NULL;
 		sub_head = sub_dir;
 	}
@@ -184,8 +184,8 @@ t_files		*dir_content_list(char **tab, t_opt option, char *str)
 		if (!(current->next = (t_files *)malloc(sizeof(t_files))))
 			return (NULL);
 		current = current->next;
-		current->name = ft_strdup(tab[i++]);
-		current->path = ft_strdup(option.parent);
+		ft_strcpy(current->name, tab[i++]);
+		ft_strcpy(current->path, option.parent);
 		current->error = (lstat(ft_strjoin(current->path, current->name), &current->buf) < 0) ? 1 : 0;
 		if (S_ISDIR(current->buf.st_mode))		//creating list of all sub-directories
 		{
@@ -193,9 +193,9 @@ t_files		*dir_content_list(char **tab, t_opt option, char *str)
 			{
 				if (!(sub_dir = (t_files *)malloc(sizeof(t_files))))
 					return (NULL);
-				sub_dir->name = ft_strdup(current->name);
+				ft_strcpy(sub_dir->name, current->name);
 				sub_dir->buf = current->buf;
-				sub_dir->path = ft_strdup(current->path);
+				ft_strcpy(sub_dir->path, current->path);
 				//sub_dir->next = NULL;
 				sub_head = sub_dir;
 			}
@@ -204,9 +204,9 @@ t_files		*dir_content_list(char **tab, t_opt option, char *str)
 				if (!(sub_dir->next = (t_files *)malloc(sizeof(t_files))))
 					return (NULL);
 				sub_dir = sub_dir->next;
-				sub_dir->name = ft_strdup(current->name);
+				ft_strcpy(sub_dir->name, current->name);
 				sub_dir->buf = current->buf;
-				sub_dir->path = ft_strdup(current->path);
+				ft_strcpy(sub_dir->path, current->path);
 				//sub_dir->next = NULL;
 			}
 		}
@@ -275,7 +275,6 @@ t_files		*dir_content_tab(char *str, t_opt option)
 	closedir(dirp);
 	option.file = 2;
 	dir_content = dir_content_list(tab, option, str);	//dir_content_list initialized, after processing will be stored in dir_content, which will RETURN to display_directories
-	printf("dir content list is: \n\n");
-	print_list(dir_content);
+	free (tab);
 	return (dir_content);
 }

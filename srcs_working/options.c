@@ -6,20 +6,12 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 12:22:34 by arohani           #+#    #+#             */
-/*   Updated: 2017/11/28 15:10:53 by arohani          ###   ########.fr       */
+/*   Updated: 2017/10/16 19:03:42 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 #include <stdio.h>
-
-void	illegal_option(char option)
-{
-	ft_putstr("ft_ls: illegal option -- ");
-	ft_putchar(option);
-	write (1, "\nusage: ft_ls [-Ralrt] [file ...]\n", 34);
-	exit (-1);
-}
 
 t_opt	scan_options(char *str)
 {

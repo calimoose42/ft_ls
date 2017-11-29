@@ -20,12 +20,12 @@
 
 void			switch_list_content(t_files *a, t_files *b)
 {
-	char		*tmp_name;
+	char		tmp_name[NAME_MAX];
 	struct stat tmp_stat;
 
-	tmp_name = a->name;
-	a->name = b->name;
-	b->name = tmp_name;
+	ft_strcpy(tmp_name, a->name);
+	ft_strcpy(a->name, b->name);
+	ft_strcpy(b->name, tmp_name);
 	tmp_stat = a->buf;
 	a->buf = b->buf;
 	b->buf = tmp_stat;
@@ -53,13 +53,7 @@ t_files			*time_sort_list(t_files *list, t_opt option)
 		list = list->next;
 		current = list->next;
 	}
-	if (option.rec == 1)
-		return (head);
-	(option.file == 1 && option.l != 1) ? display_regular_files(head, option) :
-	(option.file == 0) ? display_directories(head, option) :
-	(option.file == 2) ? display_dir_content(head, option) : long_format(head, option);
-	//(option.l == 1) ? long_format(head, option) : return (NULL);
-	return (NULL);
+	return (head);
 }
 
 t_files			*reverse_lex(t_files *list, t_opt option)
@@ -84,11 +78,5 @@ t_files			*reverse_lex(t_files *list, t_opt option)
 		list = list->next;
 		current = list->next;
 	}
-	if (option.rec == 1)
-		return (head);
-	(option.file == -1) ? display_errors(list) :
-	(option.file == 1 && option.l != 1) ? display_regular_files(head, option) :
-	(option.file == 0) ? display_directories(head, option) :
-	(option.file == 2) ? display_dir_content(head, option) : long_format(head, option);
-	return (NULL);
+	return (head);
 }

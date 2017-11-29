@@ -6,7 +6,7 @@
 /*   By: arohani <arohani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/11 14:23:45 by arohani           #+#    #+#             */
-/*   Updated: 2017/11/28 15:23:56 by arohani          ###   ########.fr       */
+/*   Updated: 2017/11/03 18:08:08 by arohani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void		print_list(t_files *args)
 {
 	//char	*date;
-	printf("About to print a list\n");
+	printf("\nAbout to print a list\n");
 	while (args != NULL)
 	{
 		//if ((args->buf).st_mtimespec.tv_sec)
@@ -24,7 +24,7 @@ void		print_list(t_files *args)
 			//date = ctime(&args->buf.st_mtimespec.tv_sec);
 			//printf("time value for %s is %s\n%ld\n", args->name, date, (args->buf).st_mtimespec.tv_sec);
 		//}				
-		printf("args->name = %s\n", args->name);
+		printf("%s\n", args->name);
 		args = args->next;
 	}
 }
@@ -41,7 +41,7 @@ t_files		*dir_args(t_files *args, t_opt option) 	//creates list of directories p
 		if (!(current = (t_files *)malloc(sizeof(t_files))))
 			return (NULL);
 		dirs = current;
-		current->name = args->name;
+		ft_strcpy(current->name, args->name);
 		current->buf = args->buf;
 		args = args->next;
 	}
@@ -54,7 +54,7 @@ t_files		*dir_args(t_files *args, t_opt option) 	//creates list of directories p
 			if (!(current->next = (t_files *)malloc(sizeof(t_files))))
 				return (NULL);
 			current = current->next;
-			current->name = args->name;
+			ft_strcpy(current->name, args->name);
 			current->buf = args->buf;
 			current->next = NULL;
 			args = args->next;
@@ -65,7 +65,7 @@ t_files		*dir_args(t_files *args, t_opt option) 	//creates list of directories p
 	if (dirs)
 	{
 		option.file = 0;
-		(option.t == 1) ? time_sort_list(dirs, option) : reverse_lex(dirs, option);
+		dirs = (option.t == 1) ? time_sort_list(dirs, option) : reverse_lex(dirs, option);
 	}
 	if (dirs && option.rec == 1)
 		return (dirs);
@@ -75,7 +75,7 @@ t_files		*dir_args(t_files *args, t_opt option) 	//creates list of directories p
 
 t_files		*regular_args(t_files *args, t_opt option) //creates list of files passed as argument and sends to sorting functions
 {
-	t_files		*regular = NULL;
+	t_files		*regular;
 	t_files		*current = NULL;
 	
 	while (args && (current == NULL))
@@ -85,14 +85,15 @@ t_files		*regular_args(t_files *args, t_opt option) //creates list of files pass
 			if (!(current = (t_files *)malloc(sizeof(t_files))))
 				return (NULL);
 			regular = current;
-			current->name = args->name;
+			ft_strcpy(current->name, args->name);
 			current->buf = args->buf;
-			current = current->next;
 			args = args->next;
 		}
 		else
 			args = args->next;
 	}
+	if (current)
+		current->next = NULL;
 	while (args)
 	{
 		if (regular && args->error == 0 && !(S_ISDIR(args->buf.st_mode)))
@@ -100,7 +101,7 @@ t_files		*regular_args(t_files *args, t_opt option) //creates list of files pass
 			if (!(current->next = (t_files *)malloc(sizeof(t_files))))
 				return (NULL);
 			current = current->next;
-			current->name = args->name;
+			ft_strcpy(current->name, args->name);
 			current->buf = args->buf;
 			current->next = NULL;
 			args = args->next;
@@ -110,10 +111,8 @@ t_files		*regular_args(t_files *args, t_opt option) //creates list of files pass
 	}
 	if (regular)
 	{
-		printf("regular sent to sort \n");
-		print_list(regular);
 		option.file = 1;
-		(option.t == 1) ? time_sort_list(regular, option) : reverse_lex(regular, option);
+		regular = (option.t == 1) ? time_sort_list(regular, option) : reverse_lex(regular, option);
 	}
 	return (NULL);
 }
@@ -133,7 +132,7 @@ t_files			*error_list(t_files *args)
 			if (!(current = (t_files *)malloc(sizeof(t_files))))
 				return (NULL);
 			errors = current;
-			current->name = args->name;
+			ft_strcpy(current->name, args->name);
 			current->error = 1;
 			current->next = NULL;
 			first = 1;
@@ -148,7 +147,7 @@ t_files			*error_list(t_files *args)
 				return (NULL);
 			current = current->next;
 			current->error = 1;
-			current->name = args->name;
+			ft_strcpy(current->name, args->name);
 			current->next = NULL;
 		}
 		args = args->next;
@@ -176,8 +175,7 @@ t_opt		check_combo(t_files *list, t_opt option) //checks if both files and direc
 			option.combo = 1;
 			return (option);
 		}
-		if (list)
-			list = list->next;
+		list = list->next;
 	}
 	if (!(file > 0 && dir > 0))
 		option.combo = 0;
@@ -194,22 +192,24 @@ void		all_args(char **tab, t_opt option)	/*taken directly from av in main, must 
 	if (!(current = (t_files *)malloc(sizeof(t_files))))
 		return ;
 	args = current;
-	current->name = ft_strdup(tab[i++]);
+	ft_strcpy(current->name, tab[i++]);
 	current->error = (lstat(current->name, &current->buf) < 0) ? 1 : 0;
-	if (!(tab[i]))
-		current->next = NULL;
+	current->next = NULL;
 	while (tab[i])
 	{
 		if (!(current->next = (t_files *)malloc(sizeof(t_files))))
 			return ;
 		current = current->next;
-		current->name = ft_strdup(tab[i++]);
+		ft_strcpy(current->name, tab[i++]);
 		current->error = (lstat(current->name, &current->buf) < 0) ? 1 : 0;
 		if (tab[i] == 0)
 			current->next = NULL;
 	}
 	option = check_combo(args, option);
 	error_list(args);
-	regular_args(args, option);
-	dir_args(args, option);
+	if (option.rec != 1)
+	{
+		regular_args(args, option);
+		dir_args(args, option);
+	}
 }
